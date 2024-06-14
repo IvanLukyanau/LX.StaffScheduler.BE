@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "3tKfv4K9d63t+mv8UAIcCLVBK1zRSimMMtk6iSU+iaQ=",
+  "Source": "LX.StaffScheduler.Api",
+  "BasePath": "_content/LX.StaffScheduler.Api",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
