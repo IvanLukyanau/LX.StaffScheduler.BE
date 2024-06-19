@@ -1,4 +1,5 @@
 ﻿using LX.StaffScheduler.DAL.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,32 +17,32 @@ namespace LX.StaffScheduler.DAL.Repositories
             _context = context;
         }
 
-        public List<City> GetAll()
+        public async Task<List<City>> GetAllAsync()
         {
-            return _context.Cities.ToList();
+            return await _context.Cities.ToListAsync();
         }
 
-        public City? GetById(int id)
+        public async Task<City?> GetByIdAsync(int id)
         {
-            return _context.Cities.Find(id);
+            return await _context.Cities.FirstOrDefaultAsync();
         }
 
-        public void Add(City city)
+        public async Task AddAsync(City city)
         {
             _context.Cities.Add(city);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Update(City city)
+        public async Task UpdateAsync(City city)
         {
             _context.Cities.Update(city);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
 
-        public void Remove(City city)
+        public async Task RemoveAsync(City city)
         {
             _context.Cities.Remove(city);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
         }
     }
 }

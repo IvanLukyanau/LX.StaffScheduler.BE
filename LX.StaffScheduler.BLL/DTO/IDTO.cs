@@ -8,5 +8,6 @@ namespace LX.StaffScheduler.BLL.DTO
 {
     public interface IDTO
     {
+        public int Id { get; set; }
     }
 }

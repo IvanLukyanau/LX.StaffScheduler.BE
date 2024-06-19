@@ -1,4 +1,5 @@
 ﻿using LX.StaffScheduler.BLL.DTO;
+using LX.StaffScheduler.DAL;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,14 +10,10 @@ namespace LX.StaffScheduler.BLL.Services.Interfaces
 {
     public interface IService<T> where T : IDTO
     {
-        T? GetById(int id);
-
-        void Update(T entity);
-
-        void Remove(T entity);
-
-        void Add(T entity);
-
-        Task<IEnumerable<T>> GetAll();
+        Task<List<T>> GetAllAsync();
+        Task UpdateAsync(T t);
+        Task<T> AddAsync(T t);
+        Task RemoveAsync(T t);
+        Task<T?> GetByIdAsync(int id);
     }
 }

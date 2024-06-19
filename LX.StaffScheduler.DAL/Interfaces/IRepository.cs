@@ -8,10 +8,10 @@ namespace LX.StaffScheduler.DAL.Interfaces
 {
     public interface IRepository<T> where T : class
     {
-        List<T> GetAll();
-        void Update(T t);
-        void Add(T t);
-        void Remove(T t);
-        T? GetById(int id);
+        Task<List<T>> GetAllAsync();
+        Task UpdateAsync(T t);
+        Task AddAsync(T t);
+        Task RemoveAsync(T t);
+        Task<T?> GetByIdAsync(int id);
     }
 }
