@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\LX.StaffScheduler.DAL\LX.StaffScheduler.DAL.csproj" />
+    <ProjectReference Include="..\LX.StaffScheduler.BLL\LX.StaffScheduler.BLL.csproj" />
   </ItemGroup>
 
   <ItemGroup>
