@@ -15,7 +15,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return new City
             {
                 Id = CityDTO.Id,
-                Name = CityDTO.Name
+                Name = CityDTO.cityName
             };
         }
 
@@ -24,7 +24,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return new CityDTO
             {
                 Id = City.Id,
-                Name = City.Name
+                cityName = City.Name
             };
         }
 

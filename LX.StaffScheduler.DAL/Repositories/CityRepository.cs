@@ -24,7 +24,7 @@ namespace LX.StaffScheduler.DAL.Repositories
 
         public async Task<City?> GetByIdAsync(int id)
         {
-            return await _context.Cities.FirstOrDefaultAsync();
+            return await _context.Cities.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task AddAsync(City city)

@@ -10,7 +10,7 @@ namespace LX.StaffScheduler.Api.DependencyInjection
             return new CityModel
             {
                 Id = CityDTO.Id,
-                Name = CityDTO.Name
+                Name = CityDTO.cityName
             };
         }
 
@@ -19,7 +19,7 @@ namespace LX.StaffScheduler.Api.DependencyInjection
             return new CityDTO
             {
                 Id = City.Id,
-                Name = City.Name
+                cityName = City.Name
             };
         }
 
