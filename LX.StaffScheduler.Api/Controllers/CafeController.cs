@@ -1,7 +1,5 @@
-﻿using LX.StaffScheduler.Api.Models;
-using LX.StaffScheduler.BLL.DependencyInjection;
+﻿using LX.StaffScheduler.BLL.DependencyInjection;
 using LX.StaffScheduler.BLL.DTO;
-using LX.StaffScheduler.BLL.Services.Common;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -54,45 +52,44 @@ namespace LX.StaffScheduler.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async ActionResult<CafeDTO> Put(int id, [FromBody] CafeDTO cafeDTO)
+        public async Task<IActionResult> Put(int id, [FromBody] CafeDTO cafeDTO)
         {
-            if (cafeDTO == null || id != cafeDTO.Id)
-            {
-                return BadRequest("Invalid data or ID mismatch");
-            }
-
             try
             {
-                var updatedCafe = await _svc.UpdateAsync(cafeDTO);
-                if (updatedCafe == null)
+                var existingCafe = await _svc.GetByIdAsync(id);
+                if (existingCafe == null)
                 {
-                    return NotFound();
+                    return NotFound("Cafe not found");
                 }
-                return Ok(updatedCafe);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
-        }
 
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            var cafe = GetById(id);
+                existingCafe.Name = cafeDTO.Name;
 
-            try
-            {
-                var result = await _svc.RemoveAsync(result.ca);
-                if (!result)
-                {
-                    return NotFound();
-                }
+                await _svc.UpdateAsync(existingCafe);
                 return NoContent();
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return Problem($"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            try
+            {
+                var cafe = await _svc.GetByIdAsync(id);
+                if (cafe == null)
+                {
+                    return NotFound("Cafe not found");
+                }
+
+                await _svc.RemoveAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
             }
         }
     }

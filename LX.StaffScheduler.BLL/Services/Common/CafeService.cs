@@ -33,10 +33,13 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return cafe?.CafeToDTO();
         }
 
-        public async Task RemoveAsync(CafeDTO entity)
+        public async Task RemoveAsync(int id)
         {
-            var cafe = entity.CafeFromDTO();
-            repository.RemoveAsync(cafe);
+            var cafe = await repository.GetByIdAsync(id);
+            if (cafe != null)
+            {
+                await repository.RemoveAsync(cafe);
+            }
         }
 
         public async Task UpdateAsync(CafeDTO entity)
