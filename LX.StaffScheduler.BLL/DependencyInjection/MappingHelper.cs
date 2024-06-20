@@ -74,9 +74,8 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return new District
             {
                 Id = districtDTO.Id,
-                Name = districtDTO.DistrictName,
+                Name = districtDTO.Name,
                 CityId = districtDTO.CityId,
-                //City = districtDTO.City.FromDTO()
             };
         }
 
@@ -85,9 +84,8 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return new DistrictDTO
             {
                 Id = district.Id,
-                DistrictName = district.Name,
+                Name = district.Name,
                 CityId = district.CityId,
-                //City = district.City.ToDTO()
             };
         }
 

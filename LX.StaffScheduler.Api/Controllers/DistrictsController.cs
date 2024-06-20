@@ -1,17 +1,17 @@
 ﻿using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
-using LX.StaffScheduler.DAL;
 using Microsoft.AspNetCore.Mvc;
+using LX.StaffScheduler.BLL.DependencyInjection;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class DistrictController : ControllerBase
+    public class DistrictsController : ControllerBase
     {
         private readonly IDistrictService _svc;
 
-        public DistrictController(IDistrictService service)
+        public DistrictsController(IDistrictService service)
         {
             _svc = service;
         }
@@ -20,7 +20,8 @@ namespace LX.StaffScheduler.Api.Controllers
         public async Task<ActionResult<List<DistrictDTO>>> Get()
         {
             var result = await _svc.GetAllAsync();
-            return Ok(result);
+            var districts = result.FromDTO();
+            return Ok(districts);
         }
 
         [HttpGet("{id}")]
@@ -53,14 +54,45 @@ namespace LX.StaffScheduler.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] DistrictDTO districtDTO)
         {
+            try
+            {
+                var existingDistrict = await _svc.GetByIdAsync(id);
+                if (existingDistrict == null)
+                {
+                    return NotFound("District not found");
+                }
 
+                existingDistrict.Name = districtDTO.Name;
+
+                await _svc.UpdateAsync(existingDistrict);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                var district = await _svc.GetByIdAsync(id);
+                if (district == null)
+                {
+                    return NotFound("District not found");
+                }
+
+                await _svc.RemoveAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
     }
 }

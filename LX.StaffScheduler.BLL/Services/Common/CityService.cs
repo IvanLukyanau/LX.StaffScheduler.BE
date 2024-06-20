@@ -2,16 +2,10 @@
 using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using LX.StaffScheduler.DAL.Interfaces;
-using LX.StaffScheduler.DAL.Repositories;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LX.StaffScheduler.BLL.Services.Common
 {
-    public class CityService: ICityService
+    public class CityService : ICityService
     {
         private readonly ICityRepository repository;
 
@@ -21,7 +15,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             this.repository = repository;
         }
 
-         public async Task<CityDTO> AddAsync(CityDTO entity)
+        public async Task<CityDTO> AddAsync(CityDTO entity)
         {
             var city = entity.CityFromDTO();
             await repository.AddAsync(city); 
@@ -42,11 +36,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
         public async Task RemoveAsync(int id)
         {
-            var city = await repository.GetByIdAsync(id);
-            if (city != null)
-            {
-                await repository.RemoveAsync(city);
-            }
+           await repository.RemoveAsync(id);
         }
 
         public async Task UpdateAsync(CityDTO entity)

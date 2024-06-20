@@ -10,10 +10,10 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
         public static void ConfigureServices(this IServiceCollection services, string connectionString)
         {
             services.ConfigureSources(connectionString);
-            services.AddTransient<ICityService, CityService>();
-            services.AddTransient<ICafeService, CafeService>();
-            services.AddTransient<IDistrictService, DistrictService>();
 
+            services.AddTransient<ICityService, CityService>();
+            services.AddTransient<IDistrictService, DistrictService>();
+            services.AddTransient<ICafeService, CafeService>();
         }
     }
 }

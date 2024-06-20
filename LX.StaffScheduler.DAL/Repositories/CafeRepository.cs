@@ -1,10 +1,5 @@
 ﻿using LX.StaffScheduler.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LX.StaffScheduler.DAL.Repositories
 {
@@ -33,8 +28,9 @@ namespace LX.StaffScheduler.DAL.Repositories
             return await _context.Cafes.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task RemoveAsync(Cafe cafe)
+        public async Task RemoveAsync(int id)
         {
+            var cafe = await _context.Cafes.FirstOrDefaultAsync(x => x.Id == id);
             _context.Cafes.Remove(cafe);
             await _context.SaveChangesAsync();
         }
