@@ -1,8 +1,6 @@
 ﻿using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
-using LX.StaffScheduler.DAL;
 using Microsoft.AspNetCore.Mvc;
-using LX.StaffScheduler.DAL;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
@@ -12,7 +10,7 @@ namespace LX.StaffScheduler.Api.Controllers
     {
         private readonly IDistrictService _svc;
 
-        public DistrictController(IDistrictService service)
+        public CafeController(IDistrictService service)
         {
             _svc = service;
         }
