@@ -7,11 +7,11 @@ namespace LX.StaffScheduler.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CafeController : ControllerBase
+    public class CafesController : ControllerBase
     {
         private readonly ICafeService _svc;
 
-        public CafeController(ICafeService service)
+        public CafesController(ICafeService service)
         {
             _svc = service;
         }

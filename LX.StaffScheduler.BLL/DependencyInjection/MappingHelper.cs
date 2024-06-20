@@ -42,8 +42,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
                 Id = CafeDTO.Id,
                 Name = CafeDTO.Name,
                 AddressOfCafe = CafeDTO.AddressOfCafe,
-                DistrictId = CafeDTO.DistrictId,
-                District = CafeDTO.District
+                DistrictId = CafeDTO.DistrictId
             };
         }
 
@@ -54,8 +53,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
                 Id = Cafe.Id,
                 Name = Cafe.Name,
                 AddressOfCafe = Cafe.AddressOfCafe,
-                DistrictId = Cafe.DistrictId,
-                District = Cafe.District
+                DistrictId = Cafe.DistrictId
             };
         }
 
