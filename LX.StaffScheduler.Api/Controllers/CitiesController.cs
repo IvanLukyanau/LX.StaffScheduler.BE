@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LX.StaffScheduler.BLL.DependencyInjection;
+using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using LX.StaffScheduler.BLL.DependencyInjection;
-using LX.StaffScheduler.Api.Models;
-using LX.StaffScheduler.DAL;
-using Microsoft.EntityFrameworkCore;
 
 namespace LX.StaffScheduler.Api.Controllers
 {

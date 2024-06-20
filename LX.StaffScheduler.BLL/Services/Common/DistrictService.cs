@@ -34,10 +34,9 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return district?.ToDTO();
         }
 
-        public async Task RemoveAsync(DistrictDTO entity)
+        public async Task RemoveAsync(int id)
         {
-            var district = entity.FromDTO();
-            repository.RemoveAsync(district);
+            repository.RemoveAsync(id);
         }
 
         public async Task UpdateAsync(DistrictDTO entity)
