@@ -30,6 +30,8 @@ namespace LX.StaffScheduler.Api
 
             builder.Services.AddScoped<ICityRepository, CityRepository>();
             builder.Services.AddScoped<ICityService, CityService>();
+            builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
+            builder.Services.AddScoped<IDistrictService, DistrictService>();
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
             builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connectionString));

@@ -1,10 +1,5 @@
 ﻿using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.DAL;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LX.StaffScheduler.BLL.DependencyInjection
 {
@@ -36,6 +31,38 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
         public static IEnumerable<CityDTO> ToDTO(this IEnumerable<City> City)
         {
             return City.Select(ToDTO);
+        }
+
+        public static District FromDTO(this DistrictDTO districtDTO)
+        {
+            return new District
+            {
+                Id = districtDTO.Id,
+                Name = districtDTO.DistrictName,
+                CityId = districtDTO.CityId,
+                //City = districtDTO.City.FromDTO()
+            };
+        }
+
+        public static DistrictDTO ToDTO(this District district)
+        {
+            return new DistrictDTO
+            {
+                Id = district.Id,
+                DistrictName = district.Name,
+                CityId = district.CityId,
+                //City = district.City.ToDTO()
+            };
+        }
+
+        public static IEnumerable<District> FromDTO(this IEnumerable<DistrictDTO> districtDTOs)
+        {
+            return districtDTOs.Select(FromDTO);
+        }
+
+        public static IEnumerable<DistrictDTO> ToDTO(this IEnumerable<District> districts)
+        {
+            return districts.Select(ToDTO);
         }
 
     }
