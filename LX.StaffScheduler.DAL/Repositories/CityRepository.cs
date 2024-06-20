@@ -39,8 +39,9 @@ namespace LX.StaffScheduler.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveAsync(City city)
+        public async Task RemoveAsync(int id)
         {
+            var city = await _context.Cities.FirstOrDefaultAsync(x => x.Id == id);
             _context.Cities.Remove(city);
             await _context.SaveChangesAsync();
         }

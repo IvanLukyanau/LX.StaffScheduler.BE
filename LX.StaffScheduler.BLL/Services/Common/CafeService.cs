@@ -35,11 +35,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
         public async Task RemoveAsync(int id)
         {
-            var cafe = await repository.GetByIdAsync(id);
-            if (cafe != null)
-            {
-                await repository.RemoveAsync(cafe);
-            }
+           await repository.RemoveAsync(id);
         }
 
         public async Task UpdateAsync(CafeDTO entity)

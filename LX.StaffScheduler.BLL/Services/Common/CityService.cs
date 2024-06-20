@@ -36,11 +36,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
         public async Task RemoveAsync(int id)
         {
-            var city = await repository.GetByIdAsync(id);
-            if (city != null)
-            {
-                await repository.RemoveAsync(city);
-            }
+           await repository.RemoveAsync(id);
         }
 
         public async Task UpdateAsync(CityDTO entity)
