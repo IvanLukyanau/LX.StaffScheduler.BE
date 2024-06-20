@@ -1,8 +1,4 @@
-using LX.StaffScheduler.BLL.Services.Common;
-using LX.StaffScheduler.BLL.Services.Interfaces;
 using LX.StaffScheduler.DAL;
-using LX.StaffScheduler.DAL.Interfaces;
-using LX.StaffScheduler.DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace LX.StaffScheduler.Api
@@ -11,18 +7,8 @@ namespace LX.StaffScheduler.Api
     {
         public static void Main(string[] args)
         {
-            var MyAllowSpecificOrigins = "_LocalAllowSpecificOrigins";
-
             var builder = WebApplication.CreateBuilder(args);
 
-            builder.Services.AddCors(options =>
-            {
-                options.AddPolicy(name: MyAllowSpecificOrigins,
-                                  policy =>
-                                  {
-                                      policy.WithOrigins("http://localhost:4200" );
-                                  });
-            });
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -45,8 +31,6 @@ namespace LX.StaffScheduler.Api
             }
 
             app.UseHttpsRedirection();
-
-            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 

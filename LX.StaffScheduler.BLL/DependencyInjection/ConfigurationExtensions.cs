@@ -13,6 +13,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             services.AddTransient<ICityService, CityService>();
             services.AddTransient<IDistrictService, DistrictService>();
 
+            services.AddTransient<ICafeService, CafeService>();
         }
     }
 }

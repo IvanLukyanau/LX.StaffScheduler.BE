@@ -1,7 +1,9 @@
-﻿using LX.StaffScheduler.BLL.DTO;
-using LX.StaffScheduler.BLL.Services.Interfaces;
-using Microsoft.AspNetCore.Mvc;
-using LX.StaffScheduler.BLL.DependencyInjection;
+﻿using LX.StaffScheduler.BLL.DependencyInjection;
+using LX.StaffScheduler.BLL.DTO;
+using LX.StaffScheduler.Api.DependencyInjection;
+using LX.StaffScheduler.Api.Models;
+using LX.StaffScheduler.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
@@ -20,7 +22,7 @@ namespace LX.StaffScheduler.Api.Controllers
         public async Task<ActionResult<List<CityDTO>>> Get()
         {
             var result = await _svc.GetAllAsync();
-            var cities = result.FromDTO();
+            var cities = result.CitiesFromDTOs();
             return Ok(cities);
         }
 
