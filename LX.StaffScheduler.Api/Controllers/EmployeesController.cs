@@ -1,20 +1,15 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserContractController : ControllerBase
+    public class EmployeesController : ControllerBase
     {
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] {
-                "value1",
-                "value2",
-                "value3"
-            };
+            return new string[] { "value1", "value2" };
         }
 
         [HttpGet("{id}")]
@@ -26,13 +21,11 @@ namespace LX.StaffScheduler.Api.Controllers
         [HttpPost]
         public void Post([FromBody] string value)
         {
-
         }
 
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)
         {
-
         }
 
         [HttpDelete("{id}")]
