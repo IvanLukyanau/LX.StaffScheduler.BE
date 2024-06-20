@@ -1,8 +1,4 @@
-using LX.StaffScheduler.BLL.Services.Common;
-using LX.StaffScheduler.BLL.Services.Interfaces;
-using LX.StaffScheduler.DAL;
-using LX.StaffScheduler.DAL.Interfaces;
-using LX.StaffScheduler.DAL.Repositories;
+using LX.StaffScheduler.BLL.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 
 namespace LX.StaffScheduler.Api
@@ -18,13 +14,9 @@ namespace LX.StaffScheduler.Api
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<ICityRepository, CityRepository>();
-            builder.Services.AddScoped<ICityService, CityService>();
-            builder.Services.AddScoped<IDistrictRepository, DistrictRepository>();
-            builder.Services.AddScoped<IDistrictService, DistrictService>();
-
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-            builder.Services.AddDbContext<Context>(options => options.UseSqlServer(connectionString));
+
+            builder.Services.ConfigureServices(connectionString);
 
             var app = builder.Build();
 
@@ -43,5 +35,7 @@ namespace LX.StaffScheduler.Api
 
             app.Run();
         }
+
+        
     }
 }

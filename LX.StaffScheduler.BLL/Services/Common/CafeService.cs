@@ -1,15 +1,15 @@
 ﻿using LX.StaffScheduler.BLL.DependencyInjection;
 using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
-using LX.StaffScheduler.DAL.Repositories;
+using LX.StaffScheduler.DAL.Interfaces;
 
 namespace LX.StaffScheduler.BLL.Services.Common
 {
     public class CafeService : ICafeService
     {
-        private readonly CafeRepository repository;
+        private readonly ICafeRepository repository;
 
-        public CafeService(CafeRepository repository)
+        public CafeService(ICafeRepository repository)
         {
             this.repository = repository;
         }
