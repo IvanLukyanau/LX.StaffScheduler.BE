@@ -23,34 +23,40 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
          public async Task<CityDTO> AddAsync(CityDTO entity)
         {
-            var city = entity.CityFromDTO();
+            var city = entity.FromDTO();
             await repository.AddAsync(city); 
-            return city.CityToDTO();
+            return city.ToDTO();
         }
 
         public async Task<List<CityDTO>> GetAllAsync()
         {
             var cities = await repository.GetAllAsync();
-            return cities.Select(city => city.CityToDTO()).ToList();
+            return cities.Select(city => city.ToDTO()).ToList();
         }
 
         public async Task<CityDTO?> GetByIdAsync(int id)
         {
             var city = await repository.GetByIdAsync(id);
-            return city?.CityToDTO();
+            return city?.ToDTO();
         }
 
-        public async Task RemoveAsync(CityDTO entity)
+        public async Task RemoveAsync(int id)
         {
-            var city = entity.CityFromDTO();
-            repository.RemoveAsync(city);
+            var city = await repository.GetByIdAsync(id);
+            if (city != null)
+            {
+                await repository.RemoveAsync(city);
+            }
         }
 
         public async Task UpdateAsync(CityDTO entity)
         {
-            var city = entity.CityFromDTO();
-            await repository.UpdateAsync(city);
+            var city = await repository.GetByIdAsync(entity.Id);
+            if (city != null)
+            {
+                city.Name = entity.Name;
+                await repository.UpdateAsync(city);
+            }
         }
-
     }
 }

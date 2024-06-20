@@ -1,7 +1,12 @@
-﻿using LX.StaffScheduler.BLL.DependencyInjection;
-using LX.StaffScheduler.BLL.DTO;
-using LX.StaffScheduler.BLL.Services.Interfaces;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using LX.StaffScheduler.BLL;
+using LX.StaffScheduler.BLL.Services.Interfaces;
+using LX.StaffScheduler.BLL.DTO;
+using LX.StaffScheduler.Api.DependencyInjection;
+using LX.StaffScheduler.Api.Models;
+using LX.StaffScheduler.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
@@ -17,10 +22,10 @@ namespace LX.StaffScheduler.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CityDTO>>> Get()
+        public async Task<ActionResult<List<CityModel>>> Get()
         {
             var result = await _svc.GetAllAsync();
-            var cities = result.CitiesFromDTOs();
+            var cities = result.FromDTO();
             return Ok(cities);
         }
 
@@ -49,19 +54,50 @@ namespace LX.StaffScheduler.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return Problem($"Internal server error: {ex.Message}");
             }
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] CityDTO cityDTO)
         {
+            try
+            {
+                var existingCity = await _svc.GetByIdAsync(id);
+                if (existingCity == null)
+                {
+                    return NotFound("City not found");
+                }
 
+                existingCity.Name = cityDTO.Name;
+
+                await _svc.UpdateAsync(existingCity);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                var city = await _svc.GetByIdAsync(id);
+                if (city == null)
+                {
+                    return NotFound("City not found");
+                }
+
+                await _svc.RemoveAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
     }
 }

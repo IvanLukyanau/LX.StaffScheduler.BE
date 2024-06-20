@@ -13,7 +13,7 @@ namespace LX.StaffScheduler.BLL.Services.Interfaces
         Task<List<T>> GetAllAsync();
         Task UpdateAsync(T t);
         Task<T> AddAsync(T t);
-        Task RemoveAsync(T t);
+        Task RemoveAsync(int id);
         Task<T?> GetByIdAsync(int id);
     }
 }
