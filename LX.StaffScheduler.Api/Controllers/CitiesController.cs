@@ -1,28 +1,23 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using LX.StaffScheduler.BLL;
+﻿using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
-using LX.StaffScheduler.BLL.DTO;
-using LX.StaffScheduler.Api.DependencyInjection;
-using LX.StaffScheduler.Api.Models;
-using LX.StaffScheduler.DAL;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using LX.StaffScheduler.BLL.DependencyInjection;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CityController : ControllerBase
+    public class CitiesController : ControllerBase
     {
         private readonly ICityService _svc;
 
-        public CityController(ICityService service)
+        public CitiesController(ICityService service)
         {
             _svc = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<CityModel>>> Get()
+        public async Task<ActionResult<List<CityDTO>>> Get()
         {
             var result = await _svc.GetAllAsync();
             var cities = result.FromDTO();
