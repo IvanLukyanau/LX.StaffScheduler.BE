@@ -11,8 +11,19 @@ namespace LX.StaffScheduler.Api
     {
         public static void Main(string[] args)
         {
+            var  MyAllowSpecificOrigins = "_localAllowSpecificOrigins";
+
             var builder = WebApplication.CreateBuilder(args);
 
+
+            builder.Services.AddCors(options =>
+        {
+            options.AddPolicy(name: MyAllowSpecificOrigins,
+                              policy  =>
+                              {
+                                  policy.WithOrigins("http://localhost:4200");
+                              });
+        });
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
@@ -33,6 +44,8 @@ namespace LX.StaffScheduler.Api
             }
 
             app.UseHttpsRedirection();
+
+            app.UseCors(MyAllowSpecificOrigins);
 
             app.UseAuthorization();
 
