@@ -25,9 +25,5 @@
   <ItemGroup>
     <ProjectReference Include="..\LX.StaffScheduler.BLL\LX.StaffScheduler.BLL.csproj" />
   </ItemGroup>
-  
-  <ItemGroup>
-   <Folder Include="Controllers\" />
-  </ItemGroup>
 
 </Project>

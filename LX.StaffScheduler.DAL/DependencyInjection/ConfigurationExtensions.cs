@@ -16,6 +16,7 @@ namespace LX.StaffScheduler.DAL.DependencyInjection
         {
             services.AddDbContext<Context>(options => options.UseSqlServer(connectionString));
             services.AddScoped<ICityRepository, CityRepository>();
+            services.AddScoped<ICafeRepository, CafeRepository>();
         }
     }
 }
