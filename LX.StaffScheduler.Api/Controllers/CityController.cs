@@ -67,7 +67,7 @@ namespace LX.StaffScheduler.Api.Controllers
                 existingCity.Name = cityDTO.Name;
 
                 await _svc.UpdateAsync(existingCity);
-                return NoContent();
+                return Ok(existingCity);
             }
             catch (Exception ex)
             {
