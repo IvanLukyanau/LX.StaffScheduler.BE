@@ -1,17 +1,20 @@
-﻿using LX.StaffScheduler.BLL.DependencyInjection;
-using LX.StaffScheduler.BLL.DTO;
+﻿using Microsoft.AspNetCore.Mvc;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
+using LX.StaffScheduler.BLL.DependencyInjection;
+using LX.StaffScheduler.Api.Models;
+using LX.StaffScheduler.DAL;
+using Microsoft.EntityFrameworkCore;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CityController : ControllerBase
+    public class CitiesController : ControllerBase
     {
         private readonly ICityService _svc;
 
-        public CityController(ICityService service)
+        public CitiesController(ICityService service)
         {
             _svc = service;
         }
