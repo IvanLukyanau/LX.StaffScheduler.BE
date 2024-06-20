@@ -14,7 +14,5 @@ namespace LX.StaffScheduler.BLL.DTO
 
         public int CityId { get; set; }
 
-        //public CityDTO City { get; set; }
-
     }
 }
