@@ -1,4 +1,5 @@
-﻿using LX.StaffScheduler.BLL.DTO;
+﻿using LX.StaffScheduler.BLL.DependencyInjection;
+using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,42 +9,42 @@ namespace LX.StaffScheduler.Api.Controllers
     [ApiController]
     public class CafeController : ControllerBase
     {
-        private readonly IDistrictService _svc;
+        private readonly ICafeService _svc;
 
-        public CafeController(IDistrictService service)
+        public CafeController(ICafeService service)
         {
             _svc = service;
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<DistrictDTO>>> Get()
+        public async Task<ActionResult<List<CafeDTO>>> Get()
         {
             var result = await _svc.GetAllAsync();
-            return Ok(result);
+            return Ok(result.CafesFromDTOs());
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<DistrictDTO>> GetById(int id)
+        public async Task<ActionResult<CafeDTO>> GetById(int id)
         {
-            var district = await _svc.GetByIdAsync(id);
-            if (district == null)
+            var result = await _svc.GetByIdAsync(id);
+            if (result == null)
             {
                 return NotFound();
             }
-            return Ok(district);
+            return Ok(result.CafeFromDTO());
         }
 
         [HttpPost]
-        public async Task<ActionResult<DistrictDTO>> Post(DistrictDTO districtDTO)
+        public async Task<ActionResult<CafeDTO>> Post(CafeDTO cafe)
         {
-            if (districtDTO == null)
+            if (cafe == null)
             {
-                return BadRequest("District data is null");
+                return BadRequest("Cafe data is null");
             }
             try
             {
-                var createdDistrict = await _svc.AddAsync(districtDTO);
-                return CreatedAtAction(nameof(GetById), new { id = createdDistrict.Id }, createdDistrict);
+                var createdCafe = await _svc.AddAsync(cafe);
+                return CreatedAtAction(nameof(GetById), new { id = createdCafe.Id }, createdCafe);
             }
             catch (Exception ex)
             {
@@ -52,14 +53,45 @@ namespace LX.StaffScheduler.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] CafeDTO cafeDTO)
         {
+            try
+            {
+                var existingCafe = await _svc.GetByIdAsync(id);
+                if (existingCafe == null)
+                {
+                    return NotFound("Cafe not found");
+                }
 
+                existingCafe.Name = cafeDTO.Name;
+
+                await _svc.UpdateAsync(existingCafe);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                var cafe = await _svc.GetByIdAsync(id);
+                if (cafe == null)
+                {
+                    return NotFound("Cafe not found");
+                }
+
+                await _svc.RemoveAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
     }
 }
