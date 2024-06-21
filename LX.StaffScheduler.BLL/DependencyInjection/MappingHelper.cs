@@ -67,6 +67,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return Cafe.Select(CafeToDTO);
         }
 
+        //District mappers
         public static District FromDTO(this DistrictDTO districtDTO)
         {
             return new District
@@ -95,6 +96,48 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
         public static IEnumerable<DistrictDTO> ToDTO(this IEnumerable<District> districts)
         {
             return districts.Select(ToDTO);
+        }
+        //Employee mappers
+        public static Employee EmployeeFromDto(this EmployeeDTO EmployeeDTO)
+        {
+            return new Employee
+            {
+                Id = EmployeeDTO.Id,
+                Login = EmployeeDTO.Login,
+                Password = EmployeeDTO.Password,
+                FirstName = EmployeeDTO.FirstName,
+                LastName = EmployeeDTO.LastName,
+                Phone = EmployeeDTO.Phone,
+                StartContractDate = EmployeeDTO.StartContractDate,
+                EndContractDate = EmployeeDTO.EndContractDate,
+                CafeId = EmployeeDTO.CafeId
+            };
+
+            public static EmployeeDTO EmployeeToDTO(this Employee Employee)
+            {
+                return new EmployeeDTO
+                {
+                    Id = EmployeeDTO.Id,
+                    Login = EmployeeDTO.Login,
+                    Password = EmployeeDTO.Password,
+                    FirstName = EmployeeDTO.FirstName,
+                    LastName = EmployeeDTO.LastName,
+                    Phone = EmployeeDTO.Phone,
+                    StartContractDate = EmployeeDTO.StartContractDate,
+                    EndContractDate = EmployeeDTO.EndContractDate,
+                    CafeId = EmployeeDTO.CafeId
+                };
+            }
+
+            public static IEnumerable<Employee> FromDTO(this IEnumerable<EmployeeDTO> employeeDTOs)
+            {
+                return employeeDTOs.Select(FromDTO);
+            }
+
+            public static IEnumerable<EmployeeDTO> ToDTO(this IEnumerable<Employee> employees)
+            {
+                return employees.Select(ToDTO);
+            }
         }
 
     }

@@ -1,0 +1,32 @@
+using LX.StaffScheduler.DAL;
+using System.ComponentModel.DataAnnotations;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace LX.StaffScheduler.BLL.DTO
+{
+    public class EmployeeDTO : IDTO
+    {
+        public int Id { get; set; }
+
+        public string Login { get; set; }
+
+        public string Password { get; set; }
+
+        public string Firstname { get; set; }
+
+        public string LastName { get; set; }
+
+        public string Phone { get; set; }
+        
+        public DateOnly StartContractDate { get; set; }
+
+        public DateOnly EndContractDate { get; set; }
+
+        public int CafeId { get; set; }
+
+    }
+}
