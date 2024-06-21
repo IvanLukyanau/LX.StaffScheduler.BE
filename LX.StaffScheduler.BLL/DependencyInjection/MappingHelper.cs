@@ -117,15 +117,15 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             {
                 return new EmployeeDTO
                 {
-                    Id = EmployeeDTO.Id,
-                    Login = EmployeeDTO.Login,
-                    Password = EmployeeDTO.Password,
-                    FirstName = EmployeeDTO.FirstName,
-                    LastName = EmployeeDTO.LastName,
-                    Phone = EmployeeDTO.Phone,
-                    StartContractDate = EmployeeDTO.StartContractDate,
-                    EndContractDate = EmployeeDTO.EndContractDate,
-                    CafeId = EmployeeDTO.CafeId
+                    Id = Employee.Id,
+                    Login = Employee.Login,
+                    Password = Employee.Password,
+                    FirstName = Employee.FirstName,
+                    LastName = Employee.LastName,
+                    Phone = Employee.Phone,
+                    StartContractDate = Employee.StartContractDate,
+                    EndContractDate = Employee.EndContractDate,
+                    CafeId = Employee.CafeId
                 };
             }
 

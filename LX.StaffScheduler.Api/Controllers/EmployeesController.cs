@@ -29,7 +29,7 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return NotFound();
             }
-            return Ok(employee);
+            return Ok(employees);
         }
 
         [HttpPost]
@@ -51,7 +51,7 @@ namespace LX.StaffScheduler.Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] EmployeeDTO employee DTO)
+        public async Task<IActionResult> Put(int id, [FromBody] EmployeeDTO employeeDTO)
         {
             try
             {
