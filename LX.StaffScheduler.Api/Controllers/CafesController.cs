@@ -20,7 +20,7 @@ namespace LX.StaffScheduler.Api.Controllers
         public async Task<ActionResult<List<CafeDTO>>> Get()
         {
             var result = await _svc.GetAllAsync();
-            return Ok(result.CafesFromDTOs());
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -31,7 +31,7 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return NotFound();
             }
-            return Ok(result.CafeFromDTO());
+            return Ok(result);
         }
 
         [HttpPost]

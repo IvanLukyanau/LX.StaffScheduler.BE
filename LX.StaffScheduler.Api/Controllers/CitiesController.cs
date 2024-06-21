@@ -20,8 +20,7 @@ namespace LX.StaffScheduler.Api.Controllers
         public async Task<ActionResult<List<CityDTO>>> Get()
         {
             var result = await _svc.GetAllAsync();
-            var cities = result.CitiesFromDTOs();
-            return Ok(cities);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
