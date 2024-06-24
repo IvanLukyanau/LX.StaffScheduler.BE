@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using LX.StaffScheduler.BLL.DTO;
+using LX.StaffScheduler.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LX.StaffScheduler.Api.Controllers
@@ -7,37 +8,91 @@ namespace LX.StaffScheduler.Api.Controllers
     [ApiController]
     public class UserContractsController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IUserContractService _svc;
+
+        public UserContractsController(IUserContractService service)
         {
-            return new string[] {
-                "value1",
-                "value2",
-                "value3"
-            };
+            _svc = service;
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<List<UserContractDTO>>> Get()
+        {
+            var result = await _svc.GetAllAsync();
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<ActionResult<UserContractDTO>> GetById(int id)
         {
-            return "value";
+            var userContract = await _svc.GetByIdAsync(id);
+            if (userContract == null)
+            {
+                return NotFound();
+            }
+            return Ok(userContract);
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<ActionResult<UserContractDTO>> Post(UserContractDTO userContractDTO)
         {
-
+            if (userContractDTO == null)
+            {
+                return BadRequest("User contract data is null");
+            }
+            try
+            {
+                var createdUserContract = await _svc.AddAsync(userContractDTO);
+                return CreatedAtAction(nameof(GetById), new { id = createdUserContract.Id }, createdUserContract);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] UserContractDTO userContractDTO)
         {
+            try
+            {
+                var existingUserContract = await _svc.GetByIdAsync(id);
+                if (existingUserContract == null)
+                {
+                    return NotFound("User contract not found");
+                }
 
+                existingUserContract.DayWeek = userContractDTO.DayWeek;
+                existingUserContract.StartContractTime = userContractDTO.StartContractTime;
+                existingUserContract.EndContractTime = userContractDTO.EndContractTime;
+
+                await _svc.UpdateAsync(existingUserContract);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            try
+            {
+                var userContract = await _svc.GetByIdAsync(id);
+                if (userContract == null)
+                {
+                    return NotFound("User contract not found");
+                }
+
+                await _svc.RemoveAsync(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Internal server error: {ex.Message}");
+            }
         }
     }
 }
