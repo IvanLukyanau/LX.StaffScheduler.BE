@@ -94,5 +94,35 @@ namespace LX.StaffScheduler.Api.Controllers
                 return Problem($"Internal server error: {ex.Message}");
             }
         }
+
+        [HttpPost("bulk-week-contract-schedule/{id}")]
+        public async Task<IActionResult> PostContractsWeekSchedule(int userId, IEnumerable<UserContractDTO> weekContract)
+        {
+            try
+            {
+                _svc.BulkWeekOfEmployeeUserContracts(userId, weekContract);
+                return Ok(weekContract);
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Save week contracts error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("weekly-contracts/{id}")]
+        public async Task<IActionResult> GetContractsWeekSchedule(int userId)
+        {
+            try
+            {
+                _svc.GetAllEmployeeContracts(userId);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Problem with getting employee week contracts: {ex.Message}");
+            }
+        }
+
+
     }
 }
