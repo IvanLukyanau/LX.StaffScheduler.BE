@@ -1,6 +1,7 @@
 ﻿using LX.StaffScheduler.BLL.DependencyInjection;
 using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
+using LX.StaffScheduler.DAL;
 using LX.StaffScheduler.DAL.Interfaces;
 
 namespace LX.StaffScheduler.BLL.Services.Common
@@ -22,16 +23,44 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return userContract.UserContractToDTO();
         }
 
+        public async Task<IEnumerable<UserContractDTO>> BulkContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
+        {
+            var contractResultIds = new List<UserContractDTO>();
+            if (weekContractsDTO != null)
+            {
+                await RemoveAllEmployeeContractsAsync(userId);
+
+                foreach (var contractDTO in weekContractsDTO)
+                {
+                    contractDTO.EmployeeId = userId;
+                    await AddAsync(contractDTO);
+
+                    contractResultIds.Add(contractDTO);
+                }
+            }
+            return contractResultIds;
+        }
+
         public async Task<List<UserContractDTO>> GetAllAsync()
         {
             var userContracts = await repository.GetAllAsync();
             return userContracts.Select(userContract => userContract.UserContractToDTO()).ToList();
+        }
+        public async Task<IEnumerable<UserContractDTO>> GetEmployeesContracts(int userId)
+        {
+            IEnumerable<UserContract> allEmployeeContracts = await repository.GetAllEmployeeContracts(userId);
+            return allEmployeeContracts.UserContractsToDTOs();
         }
 
         public async Task<UserContractDTO?> GetByIdAsync(int id)
         {
             var userContract = await repository.GetByIdAsync(id);
             return userContract?.UserContractToDTO();
+        }
+
+        public async Task RemoveAllEmployeeContractsAsync(int userId)
+        {
+            await repository.RemoveAllEmplContractsAsync(userId);
         }
 
         public async Task RemoveAsync(int id)
