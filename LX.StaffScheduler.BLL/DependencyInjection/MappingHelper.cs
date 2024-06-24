@@ -67,7 +67,9 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return Cafe.Select(CafeToDTO);
         }
 
-        public static District FromDTO(this DistrictDTO districtDTO)
+        //District mappers
+
+        public static District DistrictFromDTO(this DistrictDTO districtDTO)
         {
             return new District
             {
@@ -77,7 +79,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             };
         }
 
-        public static DistrictDTO ToDTO(this District district)
+        public static DistrictDTO DistrictToDTO(this District district)
         {
             return new DistrictDTO
             {
@@ -87,12 +89,13 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             };
         }
 
-        public static IEnumerable<District> FromDTO(this IEnumerable<DistrictDTO> districtDTOs)
+
+        public static IEnumerable<District> DistrictsFromDTOs(this IEnumerable<DistrictDTO> DistrictDTO)
         {
-            return districtDTOs.Select(FromDTO);
+            return DistrictDTO.Select(DistrictFromDTO);
         }
 
-        public static IEnumerable<DistrictDTO> ToDTO(this IEnumerable<District> districts)
+        public static IEnumerable<DistrictDTO> DistrictsToDTOs(this IEnumerable<District> District)
         {
             return District.Select(DistrictToDTO);
         }
