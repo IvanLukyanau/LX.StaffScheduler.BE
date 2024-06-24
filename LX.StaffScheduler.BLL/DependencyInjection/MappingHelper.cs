@@ -98,7 +98,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return districts.Select(ToDTO);
         }
         //Employee mappers
-        public static Employee EmployeeFromDto(this EmployeeDTO EmployeeDTO)
+        public static Employee EmployeeFromDTO(this EmployeeDTO EmployeeDTO)
         {
             return new Employee
             {
@@ -112,8 +112,9 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
                 EndContractDate = EmployeeDTO.EndContractDate,
                 CafeId = EmployeeDTO.CafeId
             };
+        }
 
-            public static EmployeeDTO EmployeeToDTO(this Employee Employee)
+        public static EmployeeDTO EmployeeToDTO(this Employee Employee)
             {
                 return new EmployeeDTO
                 {
@@ -127,18 +128,18 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
                     EndContractDate = Employee.EndContractDate,
                     CafeId = Employee.CafeId
                 };
-            }
-
-            public static IEnumerable<Employee> FromDTO(this IEnumerable<EmployeeDTO> employeeDTOs)
-            {
-                return employeeDTOs.Select(FromDTO);
-            }
-
-            public static IEnumerable<EmployeeDTO> ToDTO(this IEnumerable<Employee> employees)
-            {
-                return employees.Select(ToDTO);
-            }
         }
+
+            public static IEnumerable<Employee> EmployeesFromDTOs(this IEnumerable<EmployeeDTO> EmployeeDTO)
+            {
+                return EmployeeDTO.Select(EmployeeFromDTO);
+            }
+
+            public static IEnumerable<EmployeeDTO> EmployeesToDTOs(this IEnumerable<Employee> Employee)
+            {
+                return Employee.Select(EmployeeToDTO);
+            }
+    
 
     }
 }

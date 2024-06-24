@@ -1,4 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using LX.StaffScheduler.BLL.DependencyInjection;
+using LX.StaffScheduler.BLL.DTO;
+using LX.StaffScheduler.BLL.Services.Interfaces;
+using LX.StaffScheduler.DAL;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
@@ -17,8 +22,7 @@ namespace LX.StaffScheduler.Api.Controllers
         public async Task<ActionResult<List<EmployeeDTO>>> Get()
         {
             var result = await _svc.GetAllAsync();
-            var employees = result.FromDto();
-            return Ok(employees);
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
@@ -41,7 +45,7 @@ namespace LX.StaffScheduler.Api.Controllers
             }
             try
             {
-                var createdEmployee = await _svc.AddAsync(EmployeeDTO);
+                var createdEmployee = await _svc.AddAsync(employeeDTO);
                 return CreatedAtAction(nameof(GetById), new { id = createdEmployee.Id }, createdEmployee);
             }
             catch (Exception ex)
@@ -61,10 +65,16 @@ namespace LX.StaffScheduler.Api.Controllers
                     return NotFound("Employee not found");
                 }
 
-                existingEmployee.Name = employeeDTO.Name;
+                existingEmployee.Login = employeeDTO.Login;
+                existingEmployee.Password = employeeDTO.Password;
+                existingEmployee.FirstName = employeeDTO.FirstName;
+                existingEmployee.LastName = employeeDTO.LastName;
+                existingEmployee.Phone = employeeDTO.Phone;
+                existingEmployee.StartContractDate = employeeDTO.StartContractDate;
+                existingEmployee.EndContractDate = employeeDTO.EndContractDate;
 
                 await _svc.UpdateAsync(existingEmployee);
-                return NoContent;
+                return NoContent();
             }
             catch (Exception ex)
             {
@@ -77,7 +87,7 @@ namespace LX.StaffScheduler.Api.Controllers
         {
             try
             {
-                var employee = await._svc.GetByIdAsync(id);
+                var employee = await _svc.GetByIdAsync(id);
                 if (employee == null)
                 {
                     return NotFound("Employee not found");

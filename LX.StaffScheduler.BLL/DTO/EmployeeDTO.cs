@@ -10,7 +10,7 @@ namespace LX.StaffScheduler.BLL.DTO
 
         public string Password { get; set; }
 
-        public string Firstname { get; set; }
+        public string FirstName { get; set; }
 
         public string LastName { get; set; }
 

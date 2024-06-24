@@ -30,7 +30,7 @@ namespace LX.StaffScheduler.DAL.Repositories
 
         public async Task<Employee?> GetByIdAsync(int id)
         {
-            return await _context.Employee.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task RemoveAsync(int id)
