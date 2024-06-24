@@ -109,6 +109,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
                 DayWeek = userContractDTO.DayWeek,
                 StartContractTime = userContractDTO.StartContractTime,
                 EndContractTime = userContractDTO.EndContractTime,
+                EmployeeId = userContractDTO.EmployeeId,
             };
         }
 
@@ -120,6 +121,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
                 DayWeek = userContract.DayWeek,
                 StartContractTime = userContract.StartContractTime,
                 EndContractTime = userContract.EndContractTime,
+                EmployeeId = userContract.EmployeeId,
             };
         }
 
