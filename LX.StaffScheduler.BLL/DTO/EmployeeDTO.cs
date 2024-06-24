@@ -15,7 +15,7 @@ namespace LX.StaffScheduler.BLL.DTO
         public string LastName { get; set; }
 
         public string Phone { get; set; }
-        
+
         public DateOnly StartContractDate { get; set; }
 
         public DateOnly EndContractDate { get; set; }

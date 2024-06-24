@@ -48,7 +48,7 @@ namespace LX.StaffScheduler.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return Problem($"Internal server error: {ex.Message}");
             }
         }
 
