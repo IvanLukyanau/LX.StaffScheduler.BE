@@ -14,6 +14,7 @@ namespace LX.StaffScheduler.DAL.DependencyInjection
             services.AddScoped<IDistrictRepository, DistrictRepository>();
             services.AddScoped<ICafeRepository, CafeRepository>();
             services.AddScoped<IUserContractRepository, UserContractRepository>();
+            services.AddScoped<IWorkShiftRepository, WorkShiftRepository>();
         }
     }
 }
