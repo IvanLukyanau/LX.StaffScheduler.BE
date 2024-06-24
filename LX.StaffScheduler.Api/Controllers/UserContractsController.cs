@@ -114,8 +114,8 @@ namespace LX.StaffScheduler.Api.Controllers
         {
             try
             {
-                _svc.GetAllEmployeeContracts(userId);
-                return Ok();
+                var result = _svc.GetAllEmployeeContracts(userId);
+                return Ok(result);
             }
             catch (Exception ex)
             {

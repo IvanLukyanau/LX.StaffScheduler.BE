@@ -1,6 +1,7 @@
 ﻿using LX.StaffScheduler.BLL.DependencyInjection;
 using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
+using LX.StaffScheduler.DAL;
 using LX.StaffScheduler.DAL.Interfaces;
 
 namespace LX.StaffScheduler.BLL.Services.Common
@@ -22,7 +23,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return userContract.UserContractToDTO();
         }
 
-       public async Task BulkWeekOfEmployeeUserContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
+        public async Task BulkWeekOfEmployeeUserContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
         {
 
             if (weekContractsDTO != null)
@@ -42,19 +43,10 @@ namespace LX.StaffScheduler.BLL.Services.Common
             var userContracts = await repository.GetAllAsync();
             return userContracts.Select(userContract => userContract.UserContractToDTO()).ToList();
         }
-       public async Task<IEnumerable<UserContractDTO>> GetAllEmployeeContracts(int userId)
+        public async Task<IEnumerable<UserContractDTO>> GetAllEmployeeContracts(int userId)
         {
-            var allContracts = await repository.GetAllAsync();
-
-            var allUserContracts = new List<UserContractDTO>();
-
-            foreach (var contract in allContracts.Where(c => c.EmployeeId == userId))
-            {
-               allUserContracts.Add(contract.UserContractToDTO());
-            }
-
-            return allUserContracts;
-
+            IEnumerable<UserContract> allEmployeeContracts =  await repository.GetAllEmployeeContracts(userId);
+            return allEmployeeContracts.UserContractsToDTOs();
         }
 
         public async Task<UserContractDTO?> GetByIdAsync(int id)
@@ -63,13 +55,9 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return userContract?.UserContractToDTO();
         }
 
-      public async Task RemoveAllEmployeeContractsAsync(int userId)
+        public async Task RemoveAllEmployeeContractsAsync(int userId)
         {
-            var allContracts = await repository.GetAllAsync();
-            foreach (var contract in allContracts.Where(c => c.EmployeeId == userId))
-            {
-                await repository.RemoveAsync(contract.Id);
-            }
+            await repository.RemoveAllEmployeeContractsAsync(userId);
         }
 
         public async Task RemoveAsync(int id)
