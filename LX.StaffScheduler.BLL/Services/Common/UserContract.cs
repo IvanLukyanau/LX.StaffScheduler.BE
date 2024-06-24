@@ -22,7 +22,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return userContract.UserContractToDTO();
         }
 
-        public async Task BulkWeekOfEmployeeUserContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
+       public async Task BulkWeekOfEmployeeUserContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
         {
 
             if (weekContractsDTO != null)
@@ -42,7 +42,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             var userContracts = await repository.GetAllAsync();
             return userContracts.Select(userContract => userContract.UserContractToDTO()).ToList();
         }
-        public async Task<IEnumerable<UserContractDTO>> GetAllEmployeeContracts(int userId)
+       public async Task<IEnumerable<UserContractDTO>> GetAllEmployeeContracts(int userId)
         {
             var allContracts = await repository.GetAllAsync();
 
@@ -63,7 +63,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return userContract?.UserContractToDTO();
         }
 
-        public async Task RemoveAllEmployeeContractsAsync(int userId)
+      public async Task RemoveAllEmployeeContractsAsync(int userId)
         {
             var allContracts = await repository.GetAllAsync();
             foreach (var contract in allContracts.Where(c => c.EmployeeId == userId))
