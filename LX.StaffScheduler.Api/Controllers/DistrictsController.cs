@@ -63,6 +63,7 @@ namespace LX.StaffScheduler.Api.Controllers
                 }
 
                 existingDistrict.Name = districtDTO.Name;
+                existingDistrict.CityId = districtDTO.CityId;
 
                 await _svc.UpdateAsync(existingDistrict);
                 return NoContent();
