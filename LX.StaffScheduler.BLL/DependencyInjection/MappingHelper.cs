@@ -135,5 +135,41 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return UserContract.Select(UserContractToDTO);
         }
 
+        //WorkShift mappers
+        public static WorkShift WorkShiftFromDTO(this WorkShiftDTO workShiftDTO)
+        {
+            return new WorkShift
+            {
+                Id = workShiftDTO.Id,
+                ShiftDate = workShiftDTO.ShiftDate,
+                StartTime = workShiftDTO.StartTime,
+                EndTime = workShiftDTO.EndTime,
+                CafeId = workShiftDTO.CafeId,
+                EmployeeId = workShiftDTO.EmployeeId,
+            };
+        }
+
+        public static WorkShiftDTO WorkShiftToDTO(this WorkShift workShift)
+        {
+            return new WorkShiftDTO
+            {
+                Id = workShift.Id,
+                ShiftDate = workShift.ShiftDate,
+                StartTime = workShift.StartTime,
+                EndTime = workShift.EndTime,
+                CafeId = workShift.CafeId,
+                EmployeeId = workShift.EmployeeId,
+            };
+        }
+
+        public static IEnumerable<WorkShift> WorkShiftsFromDTOs(this IEnumerable<WorkShiftDTO> WorkShiftDTO)
+        {
+            return WorkShiftDTO.Select(WorkShiftFromDTO);
+        }
+
+        public static IEnumerable<WorkShiftDTO> WorkShiftsToDTOs(this IEnumerable<WorkShift> WorkShift)
+        {
+            return WorkShift.Select(WorkShiftToDTO);
+        }
     }
 }

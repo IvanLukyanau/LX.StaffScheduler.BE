@@ -9,5 +9,6 @@ namespace LX.StaffScheduler.BLL.Services.Interfaces
 {
     public interface ICityService: IService<CityDTO>
     {
+        Task<bool> IsCityNameUniqueAsync(string name);
     }
 }
