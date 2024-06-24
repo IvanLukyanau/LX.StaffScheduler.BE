@@ -1,5 +1,7 @@
 using LX.StaffScheduler.BLL.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
+using LX.StaffScheduler.Api.Filters;
+using LX.StaffScheduler.Api.Converters;
 
 namespace LX.StaffScheduler.Api
 {
@@ -10,6 +12,14 @@ namespace LX.StaffScheduler.Api
             var LocalAllowSpecificOrigins = "_localAllowSpecificOrigins";
 
             var builder = WebApplication.CreateBuilder(args);
+
+         
+            builder.Services.AddControllers().AddJsonOptions(options =>
+            {
+                options.JsonSerializerOptions.Converters.Add(new TimeOnlyJsonConverter());
+            });
+
+
 
             builder.Services.AddCors(options =>
             {
@@ -25,7 +35,12 @@ namespace LX.StaffScheduler.Api
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
-            builder.Services.AddSwaggerGen();
+
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.SchemaFilter<TimeOnlySchemaFilter>();
+            });
+
 
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
@@ -49,6 +64,6 @@ namespace LX.StaffScheduler.Api
             app.Run();
         }
 
-        
+
     }
 }
