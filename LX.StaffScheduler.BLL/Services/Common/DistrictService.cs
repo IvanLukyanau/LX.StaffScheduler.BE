@@ -45,6 +45,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             if (district != null)
             {
                 district.Name = entity.Name;
+                district.CityId = entity.CityId;
                 await repository.UpdateAsync(district);
             }
         }
