@@ -48,5 +48,11 @@ namespace LX.StaffScheduler.BLL.Services.Common
                 await repository.UpdateAsync(city);
             }
         }
+
+        public async Task<bool> IsCityNameUniqueAsync(string name)
+        {
+            var cities = await repository.GetAllAsync();
+            return !cities.Any(city => city.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+        }
     }
 }
