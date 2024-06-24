@@ -41,7 +41,7 @@ namespace LX.StaffScheduler.DAL.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public async Task RemoveAllEmployeeContractsAsync(int userId)
+        public async Task RemoveAllEmplContractsAsync(int userId)
         {
             var contractsToRemove = await _context.UserContracts
                 .Where(x => x.EmployeeId == userId)

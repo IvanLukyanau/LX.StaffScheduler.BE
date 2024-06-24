@@ -23,9 +23,9 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return userContract.UserContractToDTO();
         }
 
-        public async Task BulkWeekOfEmployeeUserContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
+        public async Task<IEnumerable<UserContractDTO>> BulkContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
         {
-
+            var contractResultIds = new List<UserContractDTO>();
             if (weekContractsDTO != null)
             {
                 await RemoveAllEmployeeContractsAsync(userId);
@@ -34,8 +34,11 @@ namespace LX.StaffScheduler.BLL.Services.Common
                 {
                     contractDTO.EmployeeId = userId;
                     await AddAsync(contractDTO);
+
+                    contractResultIds.Add(contractDTO);
                 }
             }
+            return contractResultIds;
         }
 
         public async Task<List<UserContractDTO>> GetAllAsync()
@@ -43,9 +46,9 @@ namespace LX.StaffScheduler.BLL.Services.Common
             var userContracts = await repository.GetAllAsync();
             return userContracts.Select(userContract => userContract.UserContractToDTO()).ToList();
         }
-        public async Task<IEnumerable<UserContractDTO>> GetAllEmployeeContracts(int userId)
+        public async Task<IEnumerable<UserContractDTO>> GetEmployeesContracts(int userId)
         {
-            IEnumerable<UserContract> allEmployeeContracts =  await repository.GetAllEmployeeContracts(userId);
+            IEnumerable<UserContract> allEmployeeContracts = await repository.GetAllEmployeeContracts(userId);
             return allEmployeeContracts.UserContractsToDTOs();
         }
 
@@ -57,7 +60,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
         public async Task RemoveAllEmployeeContractsAsync(int userId)
         {
-            await repository.RemoveAllEmployeeContractsAsync(userId);
+            await repository.RemoveAllEmplContractsAsync(userId);
         }
 
         public async Task RemoveAsync(int id)

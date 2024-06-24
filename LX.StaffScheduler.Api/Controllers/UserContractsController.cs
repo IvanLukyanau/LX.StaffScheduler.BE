@@ -95,13 +95,12 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
-        [HttpPost("bulk-week-contract-schedule/{id}")]
-        public async Task<IActionResult> PostContractsWeekSchedule(int userId, IEnumerable<UserContractDTO> weekContract)
+        [HttpPost("user/{id}/bulk")]
+        public async Task<IActionResult> BulkContracts(int userId, IEnumerable<UserContractDTO> weekContract)
         {
             try
             {
-                _svc.BulkWeekOfEmployeeUserContracts(userId, weekContract);
-                return Ok(weekContract);
+                return Ok(_svc.BulkContracts(userId, weekContract));
             }
             catch (Exception ex)
             {
@@ -109,12 +108,12 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
-        [HttpGet("weekly-contracts/{id}")]
-        public async Task<IActionResult> GetContractsWeekSchedule(int userId)
+        [HttpGet("user/{id}/bulk")]
+        public async Task<IActionResult> BulkRecieveContracts(int userId)
         {
             try
             {
-                var result = _svc.GetAllEmployeeContracts(userId);
+                var result = _svc.GetEmployeesContracts(userId);
                 return Ok(result);
             }
             catch (Exception ex)

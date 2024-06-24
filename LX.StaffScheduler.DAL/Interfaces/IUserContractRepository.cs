@@ -3,7 +3,7 @@
     public interface IUserContractRepository : IRepository<UserContract>
     {
 
-        Task RemoveAllEmployeeContractsAsync(int userId);
+        Task RemoveAllEmplContractsAsync(int userId);
 
         Task<IEnumerable<UserContract>> GetAllEmployeeContracts(int userId);
     }
