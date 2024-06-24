@@ -1,7 +1,6 @@
 ﻿using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using LX.StaffScheduler.BLL.DependencyInjection;
 
 namespace LX.StaffScheduler.Api.Controllers
 {
@@ -48,7 +47,7 @@ namespace LX.StaffScheduler.Api.Controllers
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return Problem($"Internal server error: {ex.Message}");
             }
         }
 

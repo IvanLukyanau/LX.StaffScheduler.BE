@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace LX.StaffScheduler.DAL
+﻿namespace LX.StaffScheduler.DAL
 {
     public class UserContract
     {

@@ -68,7 +68,6 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
         }
 
         //District mappers
-
         public static District DistrictFromDTO(this DistrictDTO districtDTO)
         {
             return new District
@@ -134,6 +133,49 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
         {
             return UserContract.Select(UserContractToDTO);
         }
+        //Employee mappers
+        public static Employee EmployeeFromDTO(this EmployeeDTO EmployeeDTO)
+        {
+            return new Employee
+            {
+                Id = EmployeeDTO.Id,
+                Login = EmployeeDTO.Login,
+                Password = EmployeeDTO.Password,
+                FirstName = EmployeeDTO.FirstName,
+                LastName = EmployeeDTO.LastName,
+                Phone = EmployeeDTO.Phone,
+                StartContractDate = EmployeeDTO.StartContractDate,
+                EndContractDate = EmployeeDTO.EndContractDate,
+                CafeId = EmployeeDTO.CafeId
+            };
+        }
+
+        public static EmployeeDTO EmployeeToDTO(this Employee Employee)
+            {
+                return new EmployeeDTO
+                {
+                    Id = Employee.Id,
+                    Login = Employee.Login,
+                    Password = Employee.Password,
+                    FirstName = Employee.FirstName,
+                    LastName = Employee.LastName,
+                    Phone = Employee.Phone,
+                    StartContractDate = Employee.StartContractDate,
+                    EndContractDate = Employee.EndContractDate,
+                    CafeId = Employee.CafeId
+                };
+        }
+
+            public static IEnumerable<Employee> EmployeesFromDTOs(this IEnumerable<EmployeeDTO> EmployeeDTO)
+            {
+                return EmployeeDTO.Select(EmployeeFromDTO);
+            }
+
+            public static IEnumerable<EmployeeDTO> EmployeesToDTOs(this IEnumerable<Employee> Employee)
+            {
+                return Employee.Select(EmployeeToDTO);
+            }
+    
 
         //WorkShift mappers
         public static WorkShift WorkShiftFromDTO(this WorkShiftDTO workShiftDTO)
