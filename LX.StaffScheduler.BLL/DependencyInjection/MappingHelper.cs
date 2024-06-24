@@ -94,7 +94,42 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
 
         public static IEnumerable<DistrictDTO> ToDTO(this IEnumerable<District> districts)
         {
-            return districts.Select(ToDTO);
+            return District.Select(DistrictToDTO);
+        }
+
+        //UserContract mappers
+        public static UserContract UserContractFromDTO(this UserContractDTO userContractDTO)
+        {
+            return new UserContract
+            {
+                Id = userContractDTO.Id,
+                DayWeek = userContractDTO.DayWeek,
+                StartContractTime = userContractDTO.StartContractTime,
+                EndContractTime = userContractDTO.EndContractTime,
+                EmployeeId = userContractDTO.EmployeeId,
+            };
+        }
+
+        public static UserContractDTO UserContractToDTO(this UserContract userContract)
+        {
+            return new UserContractDTO
+            {
+                Id = userContract.Id,
+                DayWeek = userContract.DayWeek,
+                StartContractTime = userContract.StartContractTime,
+                EndContractTime = userContract.EndContractTime,
+                EmployeeId = userContract.EmployeeId,
+            };
+        }
+
+        public static IEnumerable<UserContract> UserContractsFromDTOs(this IEnumerable<UserContractDTO> UserContractDTO)
+        {
+            return UserContractDTO.Select(UserContractFromDTO);
+        }
+
+        public static IEnumerable<UserContractDTO> UserContractsToDTOs(this IEnumerable<UserContract> UserContract)
+        {
+            return UserContract.Select(UserContractToDTO);
         }
 
     }
