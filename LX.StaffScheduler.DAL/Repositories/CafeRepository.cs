@@ -25,7 +25,7 @@ namespace LX.StaffScheduler.DAL.Repositories
 
         public async Task<Cafe?> GetByIdAsync(int id)
         {
-            return await _context.Cafes.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Cafes.AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task RemoveAsync(int id)

@@ -69,6 +69,7 @@ namespace LX.StaffScheduler.Api.Controllers
                 existingEmployee.Phone = employeeDTO.Phone;
                 existingEmployee.StartContractDate = employeeDTO.StartContractDate;
                 existingEmployee.EndContractDate = employeeDTO.EndContractDate;
+                existingEmployee.CafeId = employeeDTO.CafeId;
 
                 await _svc.UpdateAsync(existingEmployee);
                 return NoContent();
