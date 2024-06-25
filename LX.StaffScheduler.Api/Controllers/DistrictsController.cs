@@ -40,6 +40,13 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return BadRequest("District data is null");
             }
+
+            bool isUnique = await _svc.IsDistrictNameUniqueAsync(districtDTO.Name, districtDTO.CityId);
+            if (!isUnique)
+            {
+                return BadRequest("District name already exists for this city");
+            }
+
             try
             {
                 var createdDistrict = await _svc.AddAsync(districtDTO);
@@ -54,6 +61,11 @@ namespace LX.StaffScheduler.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] DistrictDTO districtDTO)
         {
+            bool isUnique = await _svc.IsDistrictNameUniqueAsync(districtDTO.Name, districtDTO.CityId);
+            if (!isUnique)
+            {
+                return BadRequest("District name already exists for this city");
+            }
             try
             {
                 var existingDistrict = await _svc.GetByIdAsync(id);

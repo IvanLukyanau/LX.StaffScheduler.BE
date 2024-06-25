@@ -28,6 +28,12 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return districts.Select(district => district.DistrictToDTO()).ToList();
         }
 
+        public async Task<List<DistrictDTO>> GetByCityIdAsync(int cityId)
+        {
+            var districts = await repository.GetByCityIdAsync(cityId);
+            return districts.Select(district => district.DistrictToDTO()).ToList();
+        }
+
         public async Task<DistrictDTO?> GetByIdAsync(int id)
         {
             var district = await repository.GetByIdAsync(id);
@@ -49,6 +55,12 @@ namespace LX.StaffScheduler.BLL.Services.Common
                 await repository.UpdateAsync(district);
             }
         }
-        
+
+        public async Task<bool> IsDistrictNameUniqueAsync(string nameDistrict, int idCity)
+        {
+            var districts = await repository.GetByCityIdAsync(idCity);
+            return !districts.Any(district => district.Name.Equals(nameDistrict, StringComparison.OrdinalIgnoreCase));
+        }
+
     }
 }
