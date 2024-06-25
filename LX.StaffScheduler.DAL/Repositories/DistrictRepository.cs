@@ -1,5 +1,6 @@
 ﻿using LX.StaffScheduler.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
 
 namespace LX.StaffScheduler.DAL.Repositories
 {
@@ -40,5 +41,10 @@ namespace LX.StaffScheduler.DAL.Repositories
             _context.Districts.Remove(district);
             await _context.SaveChangesAsync();
         }
+        public async Task<List<District>> GetByCityIdAsync(int cityId)
+        {
+            return await _context.Set<District>().Where(d => d.CityId == cityId).ToListAsync();
+        }
+
     }
 }
