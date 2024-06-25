@@ -26,6 +26,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
         public async Task<IEnumerable<UserContractDTO>> BulkContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
         {
             var contractResultIds = new List<UserContractDTO>();
+
             if (weekContractsDTO != null)
             {
                 await RemoveAllEmployeeContractsAsync(userId);

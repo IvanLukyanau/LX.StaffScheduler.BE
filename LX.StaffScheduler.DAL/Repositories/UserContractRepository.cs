@@ -53,7 +53,10 @@ namespace LX.StaffScheduler.DAL.Repositories
 
         public async Task<IEnumerable<UserContract>> GetAllEmployeeContracts(int userId)
         {
-            return await _context.UserContracts.Where(x => x.EmployeeId == userId).ToListAsync();
+            var contracts = await _context.UserContracts
+                .Where(x => x.EmployeeId == userId)
+                .ToListAsync();
+            return contracts;
         }
     }
 }
