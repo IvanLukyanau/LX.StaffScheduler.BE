@@ -17,26 +17,26 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
         public async Task<DistrictDTO> AddAsync(DistrictDTO entity)
         {
-            var district = entity.FromDTO();
+            var district = entity.DistrictFromDTO();
             await repository.AddAsync(district);
-            return district.ToDTO();
+            return district.DistrictToDTO();
         }
 
         public async Task<List<DistrictDTO>> GetAllAsync()
         {
             var districts = await repository.GetAllAsync();
-            return districts.Select(district => district.ToDTO()).ToList();
+            return districts.Select(district => district.DistrictToDTO()).ToList();
         }
 
         public async Task<DistrictDTO?> GetByIdAsync(int id)
         {
             var district = await repository.GetByIdAsync(id);
-            return district?.ToDTO();
+            return district?.DistrictToDTO();
         }
 
         public async Task RemoveAsync(int id)
         {
-            repository.RemoveAsync(id);
+            await repository.RemoveAsync(id);
         }
 
         public async Task UpdateAsync(DistrictDTO entity)
@@ -45,9 +45,10 @@ namespace LX.StaffScheduler.BLL.Services.Common
             if (district != null)
             {
                 district.Name = entity.Name;
+                district.CityId = entity.CityId;
                 await repository.UpdateAsync(district);
             }
         }
-
+        
     }
 }

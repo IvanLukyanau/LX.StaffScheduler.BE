@@ -67,7 +67,8 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             return Cafe.Select(CafeToDTO);
         }
 
-        public static District FromDTO(this DistrictDTO districtDTO)
+        //District mappers
+        public static District DistrictFromDTO(this DistrictDTO districtDTO)
         {
             return new District
             {
@@ -77,7 +78,7 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             };
         }
 
-        public static DistrictDTO ToDTO(this District district)
+        public static DistrictDTO DistrictToDTO(this District district)
         {
             return new DistrictDTO
             {
@@ -87,15 +88,130 @@ namespace LX.StaffScheduler.BLL.DependencyInjection
             };
         }
 
-        public static IEnumerable<District> FromDTO(this IEnumerable<DistrictDTO> districtDTOs)
+
+        public static IEnumerable<District> DistrictsFromDTOs(this IEnumerable<DistrictDTO> DistrictDTO)
         {
-            return districtDTOs.Select(FromDTO);
+            return DistrictDTO.Select(DistrictFromDTO);
         }
 
-        public static IEnumerable<DistrictDTO> ToDTO(this IEnumerable<District> districts)
+        public static IEnumerable<DistrictDTO> DistrictsToDTOs(this IEnumerable<District> District)
         {
-            return districts.Select(ToDTO);
+            return District.Select(DistrictToDTO);
         }
 
+        //UserContract mappers
+        public static UserContract UserContractFromDTO(this UserContractDTO userContractDTO)
+        {
+            return new UserContract
+            {
+                Id = userContractDTO.Id,
+                DayWeek = userContractDTO.DayWeek,
+                StartContractTime = userContractDTO.StartContractTime,
+                EndContractTime = userContractDTO.EndContractTime,
+                EmployeeId = userContractDTO.EmployeeId,
+            };
+        }
+
+        public static UserContractDTO UserContractToDTO(this UserContract userContract)
+        {
+            return new UserContractDTO
+            {
+                Id = userContract.Id,
+                DayWeek = userContract.DayWeek,
+                StartContractTime = userContract.StartContractTime,
+                EndContractTime = userContract.EndContractTime,
+                EmployeeId = userContract.EmployeeId,
+            };
+        }
+
+        public static IEnumerable<UserContract> UserContractsFromDTOs(this IEnumerable<UserContractDTO> UserContractDTO)
+        {
+            return UserContractDTO.Select(UserContractFromDTO);
+        }
+
+        public static IEnumerable<UserContractDTO> UserContractsToDTOs(this IEnumerable<UserContract> UserContract)
+        {
+            return UserContract.Select(UserContractToDTO);
+        }
+        //Employee mappers
+        public static Employee EmployeeFromDTO(this EmployeeDTO EmployeeDTO)
+        {
+            return new Employee
+            {
+                Id = EmployeeDTO.Id,
+                Login = EmployeeDTO.Login,
+                Password = EmployeeDTO.Password,
+                FirstName = EmployeeDTO.FirstName,
+                LastName = EmployeeDTO.LastName,
+                Phone = EmployeeDTO.Phone,
+                StartContractDate = EmployeeDTO.StartContractDate,
+                EndContractDate = EmployeeDTO.EndContractDate,
+                CafeId = EmployeeDTO.CafeId
+            };
+        }
+
+        public static EmployeeDTO EmployeeToDTO(this Employee Employee)
+            {
+                return new EmployeeDTO
+                {
+                    Id = Employee.Id,
+                    Login = Employee.Login,
+                    Password = Employee.Password,
+                    FirstName = Employee.FirstName,
+                    LastName = Employee.LastName,
+                    Phone = Employee.Phone,
+                    StartContractDate = Employee.StartContractDate,
+                    EndContractDate = Employee.EndContractDate,
+                    CafeId = Employee.CafeId
+                };
+        }
+
+            public static IEnumerable<Employee> EmployeesFromDTOs(this IEnumerable<EmployeeDTO> EmployeeDTO)
+            {
+                return EmployeeDTO.Select(EmployeeFromDTO);
+            }
+
+            public static IEnumerable<EmployeeDTO> EmployeesToDTOs(this IEnumerable<Employee> Employee)
+            {
+                return Employee.Select(EmployeeToDTO);
+            }
+    
+
+        //WorkShift mappers
+        public static WorkShift WorkShiftFromDTO(this WorkShiftDTO workShiftDTO)
+        {
+            return new WorkShift
+            {
+                Id = workShiftDTO.Id,
+                ShiftDate = workShiftDTO.ShiftDate,
+                StartTime = workShiftDTO.StartTime,
+                EndTime = workShiftDTO.EndTime,
+                CafeId = workShiftDTO.CafeId,
+                EmployeeId = workShiftDTO.EmployeeId,
+            };
+        }
+
+        public static WorkShiftDTO WorkShiftToDTO(this WorkShift workShift)
+        {
+            return new WorkShiftDTO
+            {
+                Id = workShift.Id,
+                ShiftDate = workShift.ShiftDate,
+                StartTime = workShift.StartTime,
+                EndTime = workShift.EndTime,
+                CafeId = workShift.CafeId,
+                EmployeeId = workShift.EmployeeId,
+            };
+        }
+
+        public static IEnumerable<WorkShift> WorkShiftsFromDTOs(this IEnumerable<WorkShiftDTO> WorkShiftDTO)
+        {
+            return WorkShiftDTO.Select(WorkShiftFromDTO);
+        }
+
+        public static IEnumerable<WorkShiftDTO> WorkShiftsToDTOs(this IEnumerable<WorkShift> WorkShift)
+        {
+            return WorkShift.Select(WorkShiftToDTO);
+        }
     }
 }

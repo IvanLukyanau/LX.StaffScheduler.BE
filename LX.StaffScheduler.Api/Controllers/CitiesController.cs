@@ -1,5 +1,4 @@
-﻿using LX.StaffScheduler.BLL.DependencyInjection;
-using LX.StaffScheduler.BLL.DTO;
+﻿using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
@@ -41,6 +40,13 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return BadRequest("City data is null");
             }
+
+            bool isUnique = await _svc.IsCityNameUniqueAsync(cityDTO.Name);
+            if (!isUnique)
+            {
+                return BadRequest("City name already exists");
+            }
+
             try
             {
                 var createdCity = await _svc.AddAsync(cityDTO);
@@ -55,6 +61,11 @@ namespace LX.StaffScheduler.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] CityDTO cityDTO)
         {
+            bool isUnique = await _svc.IsCityNameUniqueAsync(cityDTO.Name);
+            if (!isUnique)
+            {
+                return BadRequest("City name already exists");
+            }
             try
             {
                 var existingCity = await _svc.GetByIdAsync(id);

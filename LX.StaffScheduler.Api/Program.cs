@@ -16,7 +16,10 @@ namespace LX.StaffScheduler.Api
                 options.AddPolicy(name: LocalAllowSpecificOrigins,
                                   policy =>
                                   {
-                                      policy.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod();
+                                      policy.WithOrigins("http://localhost:4200",
+                                          "https://blue-plant-0d3c2f103-32.westeurope.5.azurestaticapps.net",
+                                          "https://blue-plant-0d3c2f103.5.azurestaticapps.net")
+                                          .AllowAnyHeader().AllowAnyMethod();
                                   });
             });
 
