@@ -64,6 +64,8 @@ namespace LX.StaffScheduler.Api.Controllers
                 }
 
                 existingCafe.Name = cafeDTO.Name;
+                existingCafe.AddressOfCafe = cafeDTO.AddressOfCafe;
+                existingCafe.DistrictId = cafeDTO.DistrictId;
 
                 await _svc.UpdateAsync(existingCafe);
                 return NoContent();
