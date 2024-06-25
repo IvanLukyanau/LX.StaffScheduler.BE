@@ -65,6 +65,8 @@ namespace LX.StaffScheduler.Api.Controllers
                 existingWorkShift.ShiftDate = workShiftDTO.ShiftDate;
                 existingWorkShift.StartTime = workShiftDTO.StartTime;
                 existingWorkShift.EndTime = workShiftDTO.EndTime;
+                existingWorkShift.CafeId = workShiftDTO.CafeId;
+                existingWorkShift.EmployeeId = workShiftDTO.EmployeeId;
 
                 await _svc.UpdateAsync(existingWorkShift);
                 return NoContent();

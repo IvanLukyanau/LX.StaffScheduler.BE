@@ -65,6 +65,7 @@ namespace LX.StaffScheduler.Api.Controllers
                 existingUserContract.DayWeek = userContractDTO.DayWeek;
                 existingUserContract.StartContractTime = userContractDTO.StartContractTime;
                 existingUserContract.EndContractTime = userContractDTO.EndContractTime;
+                existingUserContract.EmployeeId = userContractDTO.EmployeeId;
 
                 await _svc.UpdateAsync(existingUserContract);
                 return NoContent();
