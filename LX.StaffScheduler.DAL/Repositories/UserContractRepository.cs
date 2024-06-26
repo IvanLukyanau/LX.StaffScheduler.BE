@@ -43,9 +43,9 @@ namespace LX.StaffScheduler.DAL.Repositories
 
         public async Task RemoveAllEmplContractsAsync(int userId)
         {
-            var contractsToRemove = await _context.UserContracts
-                .Where(x => x.EmployeeId == userId)
-                .ToListAsync();
+            var contractsToRemove = _context.UserContracts
+                .Where(x => x.EmployeeId == userId);
+
 
             _context.UserContracts.RemoveRange(contractsToRemove);
             await _context.SaveChangesAsync();
@@ -56,7 +56,23 @@ namespace LX.StaffScheduler.DAL.Repositories
             var contracts = await _context.UserContracts
                 .Where(x => x.EmployeeId == userId)
                 .ToListAsync();
+
             return contracts;
+        }
+
+        public async Task<IEnumerable<UserContract>> AddRangeAsync(IEnumerable<UserContract> contracts)
+        {
+            await _context.UserContracts.AddRangeAsync(contracts);
+            await _context.SaveChangesAsync();
+
+            var employeeIds = contracts.Select(c => c.EmployeeId).Distinct().ToList();
+
+            var addedContracts = await _context.UserContracts
+            .Where(c => employeeIds.Contains(c.EmployeeId))
+            .ToListAsync();
+
+            return addedContracts;
         }
     }
 }
+
