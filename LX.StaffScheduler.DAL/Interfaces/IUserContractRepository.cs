@@ -6,5 +6,7 @@
         Task RemoveAllEmplContractsAsync(int userId);
 
         Task<IEnumerable<UserContract>> GetAllEmployeeContracts(int userId);
+
+        Task<IEnumerable<UserContract>> AddRangeAsync(IEnumerable<UserContract> contracts);
     }
 }

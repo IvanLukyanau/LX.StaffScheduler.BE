@@ -13,5 +13,7 @@ namespace LX.StaffScheduler.BLL.Services.Interfaces
 
         Task<IEnumerable<UserContractDTO>> GetEmployeesContracts(int userId);
 
+        Task<IEnumerable<UserContractDTO>> AddAsync(IEnumerable<UserContractDTO> entities);
+
     }
 }

@@ -22,24 +22,26 @@ namespace LX.StaffScheduler.BLL.Services.Common
             await repository.AddAsync(userContract);
             return userContract.UserContractToDTO();
         }
-
+        public async Task<IEnumerable<UserContractDTO>> AddAsync(IEnumerable<UserContractDTO> entities)
+        {
+            var userContracts = entities.UserContractsFromDTOs();
+            await repository.AddRangeAsync(userContracts);
+            return userContracts.UserContractsToDTOs();
+        }
         public async Task<IEnumerable<UserContractDTO>> BulkContracts(int userId, IEnumerable<UserContractDTO> weekContractsDTO)
         {
-            var contractResultIds = new List<UserContractDTO>();
+            var contractResults = new List<UserContractDTO>();
 
             if (weekContractsDTO != null)
             {
                 await RemoveAllEmployeeContractsAsync(userId);
 
-                foreach (var contractDTO in weekContractsDTO)
-                {
-                    contractDTO.EmployeeId = userId;
-                    await AddAsync(contractDTO);
+                var mappedObjects = weekContractsDTO.UserContractsFromDTOs();
+                var response = await repository.AddRangeAsync(mappedObjects);
+                return response.UserContractsToDTOs().ToList();
 
-                    contractResultIds.Add(contractDTO);
-                }
             }
-            return contractResultIds;
+            return contractResults;
         }
 
         public async Task<List<UserContractDTO>> GetAllAsync()

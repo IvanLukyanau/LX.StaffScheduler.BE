@@ -96,11 +96,12 @@ namespace LX.StaffScheduler.Api.Controllers
         }
 
         [HttpPost("user/{userId}/bulk")]
-        public async Task<IActionResult> BulkContracts(int userId, IEnumerable<UserContractDTO> weekContract)
+        public async Task<IActionResult> BulkContracts(int userId, [FromBody] IEnumerable<UserContractDTO> weekContract)
         {
             try
             {
-                return Ok(_svc.BulkContracts(userId, weekContract));
+                var res = await _svc.BulkContracts(userId, weekContract);
+                return Ok(res);
             }
             catch (Exception ex)
             {
