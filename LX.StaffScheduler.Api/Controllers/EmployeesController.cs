@@ -40,6 +40,26 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return BadRequest("Employee data is null ");
             }
+
+            var errors = new List<string>();
+
+            bool isUniqueLogin = await _svc.IsEmployeeLoginUniqueAsync(employeeDTO.Login);
+            if (!isUniqueLogin)
+            {
+                errors.Add("Login already exists");
+            }
+
+            bool isUniquePhone = await _svc.IsEmployeePhoneUniqueAsync(employeeDTO.Phone);
+            if (!isUniquePhone)
+            {
+                errors.Add("Phone already exists");
+            }
+
+            if (errors.Any())
+            {
+                return BadRequest(string.Join("; ", errors));
+            }
+
             try
             {
                 var createdEmployee = await _svc.AddAsync(employeeDTO);
@@ -54,6 +74,25 @@ namespace LX.StaffScheduler.Api.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] EmployeeDTO employeeDTO)
         {
+            var errors = new List<string>();
+
+            bool isUniqueLogin = await _svc.IsEmployeeLoginUniqueAsync(employeeDTO.Login);
+            if (!isUniqueLogin)
+            {
+                errors.Add("Login already exists");
+            }
+
+            bool isUniquePhone = await _svc.IsEmployeePhoneUniqueAsync(employeeDTO.Phone);
+            if (!isUniquePhone)
+            {
+                errors.Add("Phone already exists");
+            }
+
+            if (errors.Any())
+            {
+                return BadRequest(string.Join("; ", errors));
+            }
+
             try
             {
                 var existingEmployee = await _svc.GetByIdAsync(id);
