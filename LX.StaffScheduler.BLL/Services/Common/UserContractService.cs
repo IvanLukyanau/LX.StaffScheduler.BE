@@ -38,7 +38,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
                 var mappedObjects = weekContractsDTO.UserContractsFromDTOs();
                 var response = await repository.AddRangeAsync(mappedObjects);
-                return response.UserContractsToDTOs().ToList();
+                contractResults = response.UserContractsToDTOs().ToList();
 
             }
             return contractResults;

@@ -100,8 +100,8 @@ namespace LX.StaffScheduler.Api.Controllers
         {
             try
             {
-                var res = await _svc.BulkContracts(userId, weekContract);
-                return Ok(res);
+                var response = await _svc.BulkContracts(userId, weekContract);
+                return Ok(response);
             }
             catch (Exception ex)
             {
