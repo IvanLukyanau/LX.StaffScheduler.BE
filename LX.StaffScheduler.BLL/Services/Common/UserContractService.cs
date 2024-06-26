@@ -32,8 +32,17 @@ namespace LX.StaffScheduler.BLL.Services.Common
         {
             var contractResults = new List<UserContractDTO>();
 
+
+
             if (weekContractsDTO != null)
             {
+                weekContractsDTO = weekContractsDTO.Select(contract =>
+                {
+                    contract.StartContractTime = CorrectTimeFormat(contract.StartContractTime);
+                    contract.EndContractTime = CorrectTimeFormat(contract.EndContractTime);
+                    return contract;
+                });
+
                 await RemoveAllEmployeeContractsAsync(userId);
 
                 var mappedObjects = weekContractsDTO.UserContractsFromDTOs();
@@ -81,6 +90,17 @@ namespace LX.StaffScheduler.BLL.Services.Common
                 userContract.EndContractTime = entity.EndContractTime;
                 await repository.UpdateAsync(userContract);
             }
+        }
+        private TimeOnly CorrectTimeFormat(TimeOnly time)
+        {
+            var parts = time.ToString().Split(':');
+
+            if (parts.Length == 2)
+            {
+                time = TimeOnly.Parse($"{parts[0]}:{parts[1]}:00");
+            }
+
+            return time;
         }
     }
 }
