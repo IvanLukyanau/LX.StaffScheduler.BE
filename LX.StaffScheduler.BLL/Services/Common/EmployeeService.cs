@@ -2,6 +2,7 @@ using LX.StaffScheduler.BLL.DependencyInjection;
 using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using LX.StaffScheduler.DAL.Interfaces;
+using System.Numerics;
 
 namespace LX.StaffScheduler.BLL.Services.Common
 {
@@ -31,6 +32,18 @@ namespace LX.StaffScheduler.BLL.Services.Common
         {
             var employee = await repository.GetByIdAsync(id);
             return employee?.EmployeeToDTO();
+        }
+
+        public async Task<bool> IsEmployeeLoginUniqueAsync(string login)
+        {
+            var employees = await repository.GetAllAsync();
+            return !employees.Any(employee => employee.Login.Equals(login, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public async Task<bool> IsEmployeePhoneUniqueAsync(string phone)
+        {
+            var employees = await repository.GetAllAsync();
+            return !employees.Any(employee => employee.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase));
         }
 
         public async Task RemoveAsync(int id)

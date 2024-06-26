@@ -37,6 +37,7 @@ namespace LX.StaffScheduler.DAL.Repositories
 
         public async Task UpdateAsync(Employee employee)
         {
+            _context.ChangeTracker.Clear();
             _context.Employees.Update(employee);
             await _context.SaveChangesAsync();
         }
