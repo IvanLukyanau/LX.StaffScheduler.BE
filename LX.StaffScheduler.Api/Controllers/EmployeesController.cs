@@ -76,16 +76,16 @@ namespace LX.StaffScheduler.Api.Controllers
         {
             var errors = new List<string>();
 
-            bool isUniqueLogin = await _svc.IsEmployeeLoginUniqueAsync(employeeDTO.Login);
+            bool isUniqueLogin = await _svc.IsEmployeeChangeLoginUniqueAsync(employeeDTO.Id ,employeeDTO.Login);
             if (!isUniqueLogin)
             {
-                errors.Add("Login already exists");
+                errors.Add("Login already exists for another employee");
             }
 
-            bool isUniquePhone = await _svc.IsEmployeePhoneUniqueAsync(employeeDTO.Phone);
+            bool isUniquePhone = await _svc.IsEmployeePhoneChangeUniqueAsync(employeeDTO.Id, employeeDTO.Phone);
             if (!isUniquePhone)
             {
-                errors.Add("Phone already exists");
+                errors.Add("Phone already exists for another employee");
             }
 
             if (errors.Any())
