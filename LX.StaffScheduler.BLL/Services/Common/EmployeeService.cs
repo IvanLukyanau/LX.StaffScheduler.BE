@@ -40,10 +40,36 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return !employees.Any(employee => employee.Login.Equals(login, StringComparison.OrdinalIgnoreCase));
         }
 
+        public async Task<bool> IsEmployeeChangeLoginUniqueAsync(int emplId, string login)
+        {
+            var employees = await repository.GetAllAsync();
+            if (!employees.Any(e => e.Id == emplId && e.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
+                return true;
+            else
+            {
+                if (!employees.Any(employee => employee.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
+                    return true;
+                return false;
+            }
+        }
+
         public async Task<bool> IsEmployeePhoneUniqueAsync(string phone)
         {
             var employees = await repository.GetAllAsync();
             return !employees.Any(employee => employee.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public async Task<bool> IsEmployeePhoneChangeUniqueAsync(int emplId, string phone)
+        {
+            var employees = await repository.GetAllAsync();
+            if (!employees.Any(e => e.Id == emplId && e.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase)))
+                return true;
+            else
+            {
+                if (!employees.Any(employee => employee.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase)))
+                    return true;
+                return false;
+            }
         }
 
         public async Task RemoveAsync(int id)
