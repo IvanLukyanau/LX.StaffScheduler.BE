@@ -120,7 +120,7 @@ namespace LX.StaffScheduler.Api.Controllers
         {
             try
             {
-                var response = await _svc.GetWeekWorkShiftss(cafeId, day);
+                var response = await _svc.CreateWeekSchedule(cafeId, day);
                 return Ok(response);
 
             }
