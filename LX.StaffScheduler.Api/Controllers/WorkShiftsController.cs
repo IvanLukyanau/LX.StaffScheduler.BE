@@ -77,6 +77,8 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
+
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
@@ -95,6 +97,39 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return Problem($"Internal server error: {ex.Message}");
             }
+        }
+
+        
+        [HttpGet("/cafe/{cafeId}")]
+        public async Task<IActionResult> GetWeekWorkShifts(int cafeId, [FromBody] DateOnly day )
+        {
+            try
+            {
+                var response = await _svc.GetWeekWorkShiftss(cafeId, day);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Iternal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("/cafe/{cafeId}")]
+        public async Task<IActionResult> PostWeekSchedule(int cafeId, [FromBody] DateOnly day )
+        {
+            try
+            {
+                var response = await _svc.GetWeekWorkShiftss(cafeId, day);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Iternal server error: {ex.Message}");
+            }
+
+          
         }
     }
 }

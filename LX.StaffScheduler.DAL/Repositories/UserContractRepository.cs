@@ -73,6 +73,22 @@ namespace LX.StaffScheduler.DAL.Repositories
 
             return addedContracts;
         }
+
+        public async Task<IEnumerable<UserContract>> GetAllEmployeeContracts(List<int> userIds)
+        {
+            var result = new List<UserContract>();
+
+            foreach (var userId in userIds)
+            {
+                var contracts = await _context.UserContracts
+                .Where(x => x.EmployeeId == userId)
+                .ToListAsync();
+
+                result.AddRange(contracts);
+            }
+
+            return result;
+        }
     }
 }
 
