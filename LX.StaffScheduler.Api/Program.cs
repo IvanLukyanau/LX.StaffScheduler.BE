@@ -1,3 +1,5 @@
+using LX.StaffScheduler.BLL.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 
 namespace LX.StaffScheduler.Api
 {
@@ -5,18 +7,32 @@ namespace LX.StaffScheduler.Api
     {
         public static void Main(string[] args)
         {
+            var LocalAllowSpecificOrigins = "_localAllowSpecificOrigins";
+
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: LocalAllowSpecificOrigins,
+                                  policy =>
+                                  {
+                                      policy.WithOrigins("http://localhost:4200",
+                                          "https://blue-plant-0d3c2f103-32.westeurope.5.azurestaticapps.net",
+                                          "https://blue-plant-0d3c2f103.5.azurestaticapps.net")
+                                          .AllowAnyHeader().AllowAnyMethod();
+                                  });
+            });
 
             builder.Services.AddControllers();
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
+            builder.Services.ConfigureServices(connectionString);
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -24,13 +40,15 @@ namespace LX.StaffScheduler.Api
             }
 
             app.UseHttpsRedirection();
+            app.UseCors(LocalAllowSpecificOrigins);
 
             app.UseAuthorization();
-
 
             app.MapControllers();
 
             app.Run();
         }
+
+        
     }
 }
