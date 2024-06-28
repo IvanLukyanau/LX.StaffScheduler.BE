@@ -100,7 +100,7 @@ namespace LX.StaffScheduler.Api.Controllers
         }
 
         
-        [HttpGet("/cafe/{cafeId}")]
+        [HttpGet("cafe/{cafeId}")]
         public async Task<IActionResult> GetWeekWorkShifts(int cafeId, [FromBody] DateOnly day )
         {
             try
@@ -115,7 +115,7 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
-        [HttpPost("api/WorShifts/cafe/{cafeId}")]
+        [HttpPost("cafe/{cafeId}")]
         public async Task<IActionResult> PostWeekSchedule(int cafeId, [FromBody] DateOnly day )
         {
             try
