@@ -76,9 +76,9 @@ namespace LX.StaffScheduler.DAL.Repositories
 
         public async Task<IEnumerable<UserContract>> GetAllEmployeeContracts(List<int> userIds)
         {
-            var contracts = await _context.UserContracts
-            .Where(x => userIds.Contains(y => x.EmployeeId == y))
-            .ToListAsync();
+            return await _context.UserContracts
+                .Where(x => userIds.Contains(x.EmployeeId))
+                .ToListAsync();
 
             /* N+1 problem
             select * from UserContracts as UC
@@ -89,9 +89,6 @@ namespace LX.StaffScheduler.DAL.Repositories
             where UC.EmployeeId = '21' ) * userIds.Count()
 
             */
-
-            
-            return contracts;
         }
     }
 }
