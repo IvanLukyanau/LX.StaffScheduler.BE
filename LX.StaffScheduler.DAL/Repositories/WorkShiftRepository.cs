@@ -40,5 +40,33 @@ namespace LX.StaffScheduler.DAL.Repositories
             _context.WorkShifts.Remove(workShift);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<IEnumerable<DateOnly>> GetMondaysWorkShiftsAsync(int cafeId)
+        {
+            var weekStartDates = new List<DateOnly>();
+
+            var workShifts = await _context.WorkShifts
+                .Where(ws => ws.CafeId == cafeId && ws.ShiftDate.DayOfWeek == DayOfWeek.Monday)
+                .OrderBy(ws => ws.ShiftDate)
+                .ToListAsync();
+
+            var oldestMondayDate = workShifts.Select(ws => ws.ShiftDate).FirstOrDefault();
+
+            if (oldestMondayDate == default)
+            {
+                return weekStartDates; 
+            }
+
+            weekStartDates.Add(oldestMondayDate);
+            var currentMonday = oldestMondayDate;
+
+            while (currentMonday <= workShifts.Last().ShiftDate)
+            {
+                currentMonday = currentMonday.AddDays(7);
+                weekStartDates.Add(currentMonday);
+            }
+
+            return weekStartDates;
+        }
     }
 }
