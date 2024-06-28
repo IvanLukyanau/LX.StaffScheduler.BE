@@ -56,7 +56,11 @@ namespace LX.StaffScheduler.BLL.Services.Common
                     readyWeekShift.AddRange(dayShifts);
                 }
 
-                return await FillDayGaps(readyWeekShift, standartCloseCafeTime, cafeId);
+                readyWeekShift = await FillDayGaps(readyWeekShift, standartCloseCafeTime, cafeId);
+
+                return readyWeekShift.OrderBy(s => s.ShiftDate)
+                                   .ThenBy(s => s.StartTime)
+                                   .ToList();
             }
             else
             {
@@ -79,6 +83,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
                 }
 
                 readyWeekShift = await FillDayGaps(readyWeekShift, standartCloseCafeTime, cafeId);
+
                 return readyWeekShift.OrderBy(s => s.ShiftDate)
                                      .ThenBy(s => s.StartTime)
                                      .ToList();
