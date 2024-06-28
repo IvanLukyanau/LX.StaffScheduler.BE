@@ -32,67 +32,25 @@ namespace LX.StaffScheduler.BLL.Services.Common
         public async Task<IEnumerable<WorkShiftExtendedDTO>> CreateWeekSchedule(int cafeId, DateOnly monday)
         {
             var readyWeekShift = new List<WorkShiftExtendedDTO>();
-
             var standartOpenCafeTime = new TimeOnly(10, 0);
             var standartCloseCafeTime = new TimeOnly(19, 0);
-
             var shifts = await repository.GetWeekWorkShifts(cafeId, monday);
-            var shiftsList = shifts.ToList();
+            var shiftsList = shifts?.ToList();
 
-            if (shifts == null)
+            if (shiftsList == null)
             {
-                var employeeList = await employeeRepository.GetCafeEmployees(cafeId);
-                var cafeEmployees = employeeList.ToList();
-
+                var cafeEmployees = (await employeeRepository.GetCafeEmployees(cafeId)).ToList();
                 var cafeEmployeesIds = cafeEmployees.Select(e => e.Id).Distinct().ToList();
                 var userContractsList = await userContractRepository.GetAllEmployeeContracts(cafeEmployeesIds);
 
                 for (int i = 0; i < 7; i++)
                 {
                     var currentDay = monday.AddDays(i);
-                    var dayShifts = new List<WorkShiftExtendedDTO>();
-
-                    foreach (var cafeEmployee in cafeEmployees)
-                    {
-                        var employeeContracts = userContractsList.Where(u => u.Id == cafeEmployee.Id && (int)currentDay.DayOfWeek == u.DayWeek).ToList();
-
-                        foreach (var employee in employeeContracts)
-                        {
-                            if (employee.StartContractTime < standartOpenCafeTime)
-                            {
-                                employee.StartContractTime = standartOpenCafeTime;
-                            }
-
-                            if (employee.EndContractTime > standartCloseCafeTime)
-                            {
-                                employee.EndContractTime = standartCloseCafeTime;
-                            }
-
-                            var shift = new WorkShiftExtendedDTO
-                            {
-                                ShiftDate = currentDay,
-                                StartTime = employee.StartContractTime,
-                                EndTime = employee.EndContractTime,
-                                CafeId = cafeId,
-                                EmployeeId = employee.EmployeeId,
-                                EmployeeName = cafeEmployee.FirstName + cafeEmployee.LastName
-                            };
-                            dayShifts.Add(shift);
-                        }
-                    }
+                    var dayShifts = GetDayShifts(cafeEmployees, (List<UserContract>)userContractsList, currentDay, cafeId, standartOpenCafeTime, standartCloseCafeTime);
 
                     if (!dayShifts.Any())
                     {
-                        var emptyShift = new WorkShiftExtendedDTO
-                        {
-                            ShiftDate = currentDay,
-                            StartTime = standartOpenCafeTime,
-                            EndTime = standartCloseCafeTime,
-                            CafeId = cafeId,
-                            EmployeeId = -1,
-                            EmployeeName = "No Employee"
-                        };
-                        dayShifts.Add(emptyShift);
+                        dayShifts.Add(CreateEmptyShift(currentDay, cafeId, standartOpenCafeTime, standartCloseCafeTime));
                     }
 
                     readyWeekShift.AddRange(dayShifts);
@@ -102,11 +60,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             }
             else
             {
-                var employeeList = await employeeRepository.GetCafeEmployees(cafeId);
-                var cafeEmployees = employeeList.ToDictionary(e => e.Id, e => e);
-
-
-
+                var cafeEmployees = (await employeeRepository.GetCafeEmployees(cafeId)).ToDictionary(e => e.Id, e => e);
                 readyWeekShift.AddRange(ConvertShiftsToExtended(shiftsList.WorkShiftsToDTOs(), cafeEmployees));
 
                 var allDaysOfWeek = Enumerable.Range(0, 7).Select(i => monday.AddDays(i)).ToList();
@@ -116,42 +70,82 @@ namespace LX.StaffScheduler.BLL.Services.Common
                 {
                     if (!existingDays.Contains(day))
                     {
-                        var emptyShift = new WorkShiftExtendedDTO
-                        {
-                            ShiftDate = day,
-                            StartTime = standartOpenCafeTime,
-                            EndTime = standartCloseCafeTime,
-                            CafeId = cafeId,
-                            EmployeeId = -1,
-                            EmployeeName = "No Employee"
-                        };
-                        readyWeekShift.Add(emptyShift);
+                        readyWeekShift.Add(CreateEmptyShift(day, cafeId, standartOpenCafeTime, standartCloseCafeTime));
                     }
                     else
                     {
-                        var dayShifts = readyWeekShift.Where(s => s.ShiftDate == day).ToList();
-
-                        foreach (var shift in dayShifts)
-                        {
-                            if (shift.StartTime < standartOpenCafeTime)
-                            {
-                                shift.StartTime = standartOpenCafeTime;
-                            }
-
-                            if (shift.EndTime > standartCloseCafeTime)
-                            {
-                                shift.EndTime = standartCloseCafeTime;
-                            }
-
-                            if (shift.EndTime < standartOpenCafeTime)
-                            {
-                                shift.EndTime = standartOpenCafeTime.AddHours(1);
-                            }
-                        }
+                        AdjustShiftsTimes(readyWeekShift, day, standartOpenCafeTime, standartCloseCafeTime);
                     }
                 }
+
                 readyWeekShift = await FillDayGaps(readyWeekShift, standartCloseCafeTime, cafeId);
-                return readyWeekShift;
+                return readyWeekShift.OrderBy(s => s.ShiftDate)
+                                     .ThenBy(s => s.StartTime)
+                                     .ToList();
+            }
+        }
+
+        private List<WorkShiftExtendedDTO> GetDayShifts(List<Employee> cafeEmployees, List<UserContract> userContractsList, DateOnly currentDay, int cafeId, TimeOnly standartOpenCafeTime, TimeOnly standartCloseCafeTime)
+        {
+            var dayShifts = new List<WorkShiftExtendedDTO>();
+
+            foreach (var cafeEmployee in cafeEmployees)
+            {
+                var employeeContracts = userContractsList
+                    .Where(u => u.Id == cafeEmployee.Id && (int)currentDay.DayOfWeek == u.DayWeek)
+                    .ToList();
+
+                foreach (var employee in employeeContracts)
+                {
+                    if (employee.StartContractTime < standartOpenCafeTime)
+                        employee.StartContractTime = standartOpenCafeTime;
+
+                    if (employee.EndContractTime > standartCloseCafeTime)
+                        employee.EndContractTime = standartCloseCafeTime;
+
+                    var shift = new WorkShiftExtendedDTO
+                    {
+                        ShiftDate = currentDay,
+                        StartTime = employee.StartContractTime,
+                        EndTime = employee.EndContractTime,
+                        CafeId = cafeId,
+                        EmployeeId = employee.EmployeeId,
+                        EmployeeName = cafeEmployee.FirstName + cafeEmployee.LastName
+                    };
+                    dayShifts.Add(shift);
+                }
+            }
+
+            return dayShifts;
+        }
+
+        private WorkShiftExtendedDTO CreateEmptyShift(DateOnly day, int cafeId, TimeOnly standartOpenCafeTime, TimeOnly standartCloseCafeTime)
+        {
+            return new WorkShiftExtendedDTO
+            {
+                ShiftDate = day,
+                StartTime = standartOpenCafeTime,
+                EndTime = standartCloseCafeTime,
+                CafeId = cafeId,
+                EmployeeId = -1,
+                EmployeeName = "No Employee"
+            };
+        }
+
+        private void AdjustShiftsTimes(List<WorkShiftExtendedDTO> readyWeekShift, DateOnly day, TimeOnly standartOpenCafeTime, TimeOnly standartCloseCafeTime)
+        {
+            var dayShifts = readyWeekShift.Where(s => s.ShiftDate == day).ToList();
+
+            foreach (var shift in dayShifts)
+            {
+                if (shift.StartTime < standartOpenCafeTime)
+                    shift.StartTime = standartOpenCafeTime;
+
+                if (shift.EndTime > standartCloseCafeTime)
+                    shift.EndTime = standartCloseCafeTime;
+
+                if (shift.EndTime < standartOpenCafeTime)
+                    shift.EndTime = standartOpenCafeTime.AddHours(1);
             }
         }
 
@@ -206,6 +200,8 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
             return newReadyWeekShift;
         }
+
+
         public async Task<List<WorkShiftDTO>> GetAllAsync()
         {
             var workShifts = await repository.GetAllAsync();
