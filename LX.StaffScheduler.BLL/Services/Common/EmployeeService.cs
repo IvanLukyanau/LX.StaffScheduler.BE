@@ -43,15 +43,16 @@ namespace LX.StaffScheduler.BLL.Services.Common
         public async Task<bool> IsEmployeeChangeLoginUniqueAsync(int emplId, string login)
         {
             var employees = await repository.GetAllAsync();
-            if (employees.Any(e => e.Id != emplId && e.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
-                return false;
+            if (employees.Any(e => e.Id == emplId && e.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
+                return true;
+            
             else
             {
-                if (employees.Any(e => e.Id == emplId && e.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
-                    return true;
+                if (employees.Any(e => e.Id != emplId && e.Login.Equals(login, StringComparison.OrdinalIgnoreCase)))
+                    return false;
                 else
                 {
-                    return false;
+                    return true;
                 }
             }
 
@@ -66,13 +67,13 @@ namespace LX.StaffScheduler.BLL.Services.Common
         public async Task<bool> IsEmployeePhoneChangeUniqueAsync(int emplId, string phone)
         {
             var employees = await repository.GetAllAsync();
-            if (employees.Any(e => e.Id != emplId && e.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase)))
-                return false;
+            if (employees.Any(e => e.Id == emplId && e.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase)))
+                return true;
             else
             {
-                if (employees.Any(e => e.Id == emplId && e.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase)))
-                    return true;
-                return false;
+                if (employees.Any(e => e.Id != emplId && e.Phone.Equals(phone, StringComparison.OrdinalIgnoreCase)))
+                    return false;
+                return true;
             }
         }
 

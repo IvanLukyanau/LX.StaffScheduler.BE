@@ -68,5 +68,31 @@ namespace LX.StaffScheduler.DAL.Repositories
 
             return weekStartDates;
         }
+        public async Task<IEnumerable<WorkShift>> GetWeekWorkShifts(int cafeId, DateOnly weekStartDate)
+        {
+            if (weekStartDate.DayOfWeek != DayOfWeek.Monday)
+            {
+                weekStartDate = weekStartDate.AddDays(-(int)weekStartDate.DayOfWeek + (int)DayOfWeek.Monday);
+            }
+
+            DateOnly weekEndDate = weekStartDate.AddDays(6);
+
+            var workShifts = await _context.WorkShifts
+                .Where(ws => ws.CafeId == cafeId && ws.ShiftDate >= weekStartDate && ws.ShiftDate <= weekEndDate)
+                .ToListAsync();
+
+            return workShifts;
+        }
+
+        public async Task<IEnumerable<WorkShift>> GetDayWorkShifts(int cafeId, DateOnly day)
+        {
+            var workShifts = await _context.WorkShifts
+                .Where(ws => ws.CafeId == cafeId && ws.ShiftDate == day)
+                .ToListAsync();
+
+            return workShifts;
+        }
+
+
     }
 }

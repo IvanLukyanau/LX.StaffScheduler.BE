@@ -73,6 +73,23 @@ namespace LX.StaffScheduler.DAL.Repositories
 
             return addedContracts;
         }
+
+        public async Task<IEnumerable<UserContract>> GetAllEmployeeContracts(List<int> userIds)
+        {
+            return await _context.UserContracts
+                .Where(x => userIds.Contains(x.EmployeeId))
+                .ToListAsync();
+
+            /* N+1 problem
+            select * from UserContracts as UC
+            where UC.EmployeeId in ('21', '22', ...)
+
+
+            (select * from UserContracts as UC
+            where UC.EmployeeId = '21' ) * userIds.Count()
+
+            */
+        }
     }
 }
 

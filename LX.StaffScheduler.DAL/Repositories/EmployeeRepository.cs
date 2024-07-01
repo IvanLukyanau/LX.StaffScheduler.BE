@@ -28,6 +28,15 @@ namespace LX.StaffScheduler.DAL.Repositories
             return await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<IEnumerable<Employee>> GetCafeEmployees(int cafeId)
+        {
+            var employees = await _context.Employees
+                            .Where(e => e.CafeId == cafeId)
+                            .ToListAsync();
+
+            return employees;
+        }
+
         public async Task RemoveAsync(int id)
         {
             var employee = await _context.Employees.FirstOrDefaultAsync(x => x.Id == id);
