@@ -3,8 +3,6 @@ using LX.StaffScheduler.BLL.DTO;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using LX.StaffScheduler.DAL;
 using LX.StaffScheduler.DAL.Interfaces;
-using LX.StaffScheduler.DAL.Repositories;
-using System.Collections.Generic;
 
 namespace LX.StaffScheduler.BLL.Services.Common
 {
