@@ -115,8 +115,8 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
-        [HttpPost("cafe/{cafeId}")]
-        public async Task<IActionResult> PostWeekSchedule(int cafeId, [FromBody] DateOnly day )
+        [HttpPost("cafe/{cafeId}/date/{day}")]
+        public async Task<IActionResult> PostWeekSchedule(int cafeId, DateOnly day )
         {
             try
             {
