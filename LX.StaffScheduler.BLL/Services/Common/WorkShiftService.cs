@@ -27,6 +27,17 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return workShift.WorkShiftToDTO();
         }
 
+        public async Task<bool> IsCurrentWeekScheduleExists(int cafeId, DateOnly monday)
+        {
+            var shifts = await repository.GetWeekWorkShifts(cafeId, monday);
+            var shiftsList = shifts.ToList();   
+
+           if(shiftsList.Count == 0)
+                return false;
+           else 
+                return true;
+        }
+
         public async Task<IEnumerable<WorkShiftExtendedDTO>> CreateWeekSchedule(int cafeId, DateOnly monday)
         {
             var readyWeekShift = new List<WorkShiftExtendedDTO>();
