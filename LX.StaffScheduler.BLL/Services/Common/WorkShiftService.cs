@@ -299,7 +299,10 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return extendedShifts;
         }
 
-
+        public async Task<IEnumerable<DateOnly>> GetMondaysWorkShiftsAsync(int cafeId)
+        {
+            return  await repository.GetMondaysWorkShiftsAsync(cafeId);
+        }
     }
 }
 
