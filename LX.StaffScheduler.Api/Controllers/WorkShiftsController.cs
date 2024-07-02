@@ -131,5 +131,21 @@ namespace LX.StaffScheduler.Api.Controllers
 
           
         }
+
+        [HttpGet("cafe/mondays/{cafeId}")]
+        public async Task<IActionResult> GetMondaysSchedule(int cafeId)
+        {
+            try
+            {
+                var response = await _svc.GetMondaysWorkShiftsAsync(cafeId);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Iternal server error: {ex.Message}");
+            }
+        }
+
     }
 }
