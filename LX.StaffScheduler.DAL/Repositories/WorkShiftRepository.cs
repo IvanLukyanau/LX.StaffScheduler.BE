@@ -111,5 +111,24 @@ namespace LX.StaffScheduler.DAL.Repositories
             return responseList;
 
         }
+
+        public async Task<IEnumerable<WorkShift>> UpdateWeekWorkShifts(IEnumerable<WorkShift> workShifts)
+        {
+            var workShiftsList = workShifts.ToList();
+            var mondayOfTheWeek = workShiftsList.Min(ws => ws.ShiftDate);
+
+            var responseList = await GetWeekWorkShifts(workShiftsList.First().CafeId, mondayOfTheWeek);
+
+
+            _context.WorkShifts.RemoveRange(responseList);
+
+            await _context.WorkShifts.AddRangeAsync(workShiftsList);
+            await _context.SaveChangesAsync();
+
+            var updatedWorkShifts = await GetWeekWorkShifts(workShiftsList.First().CafeId, mondayOfTheWeek);
+
+            return updatedWorkShifts;
+        }
+
     }
 }

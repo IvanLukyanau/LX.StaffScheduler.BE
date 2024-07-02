@@ -7,6 +7,8 @@
         Task<IEnumerable<WorkShift>> GetDayWorkShifts(int cafeId, DateOnly weekStartDate);
 
         Task <IEnumerable<WorkShift>> SaveWeekWorkShifts(IEnumerable<WorkShift> workShifts);
+        Task<IEnumerable<WorkShift>> UpdateWeekWorkShifts(IEnumerable<WorkShift> workShifts);
+
 
     }
 }
