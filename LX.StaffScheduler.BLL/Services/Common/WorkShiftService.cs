@@ -337,7 +337,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return await repository.SaveWeekWorkShifts(workShiftsList);
         }
 
-        public Task<IEnumerable<WorkShift>> UpdateWeekWorkShifts(IEnumerable<WorkShiftExtendedDTO> workShifts)
+        public async Task<IEnumerable<WorkShift>> UpdateWeekWorkShifts(IEnumerable<WorkShiftExtendedDTO> workShifts)
         {
             var workShiftsList = ConvertExtendedShiftsToNormal(workShifts);
 
