@@ -146,51 +146,51 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return Problem($"Iternal server error: {ex.Message}");
             }
+        }
 
-            [HttpHead("cafe/{cafeId}/date/{day}")]
-             async Task<IActionResult> CheckCurrentWeekScheduleExists(int cafeId, DateOnly day)
-            {
-                bool exists = await _svc.IsCurrentWeekScheduleExists(cafeId, day);
-                if (exists)
-                    return NoContent();
-                else
-                    return Ok();
-
-            }
-
-
-            [HttpPut("cafe/{cafeId}")]
-             async Task<IActionResult> UpdateWeekSchedule([FromBody] IEnumerable<WorkShiftExtendedDTO> weekWorkshifts)
-            {
-                try
-                {
-                    var response = await _svc.UpdateWeekWorkShifts(weekWorkshifts);
-                    return Ok(response);
-
-                }
-                catch (Exception ex)
-                {
-                    return Problem($"Iternal server error: {ex.Message}");
-                }
-            }
-
-
-
-            [HttpGet("cafe/mondays/{cafeId}")]
-             async Task<IActionResult> GetMondaysSchedule(int cafeId)
-            {
-                try
-                {
-                    var response = await _svc.GetMondaysWorkShiftsAsync(cafeId);
-                    return Ok(response);
-
-                }
-                catch (Exception ex)
-                {
-                    return Problem($"Iternal server error: {ex.Message}");
-                }
-            }
+        [HttpHead("cafe/{cafeId}/date/{day}")]
+        public async Task<IActionResult> CheckCurrentWeekScheduleExists(int cafeId, DateOnly day)
+        {
+            bool exists = await _svc.IsCurrentWeekScheduleExists(cafeId, day);
+            if (exists)
+                return NoContent();
+            else
+                return Ok();
 
         }
+
+
+        [HttpPut("cafe/{cafeId}")]
+        public async Task<IActionResult> UpdateWeekSchedule([FromBody] IEnumerable<WorkShiftExtendedDTO> weekWorkshifts)
+        {
+            try
+            {
+                var response = await _svc.UpdateWeekWorkShifts(weekWorkshifts);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Iternal server error: {ex.Message}");
+            }
+        }
+
+
+
+        [HttpGet("cafe/mondays/{cafeId}")]
+        public async Task<IActionResult> GetMondaysSchedule(int cafeId)
+        {
+            try
+            {
+                var response = await _svc.GetMondaysWorkShiftsAsync(cafeId);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Iternal server error: {ex.Message}");
+            }
+        }
+
     }
 }
