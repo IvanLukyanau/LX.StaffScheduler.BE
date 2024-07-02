@@ -27,6 +27,17 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return workShift.WorkShiftToDTO();
         }
 
+        public async Task<bool> IsCurrentWeekScheduleExists(int cafeId, DateOnly monday)
+        {
+            var shifts = await repository.GetWeekWorkShifts(cafeId, monday);
+            var shiftsList = shifts.ToList();   
+
+           if(shiftsList.Count == 0)
+                return false;
+           else 
+                return true;
+        }
+
         public async Task<IEnumerable<WorkShiftExtendedDTO>> CreateWeekSchedule(int cafeId, DateOnly monday)
         {
             var readyWeekShift = new List<WorkShiftExtendedDTO>();
@@ -107,7 +118,6 @@ namespace LX.StaffScheduler.BLL.Services.Common
                         employee.EndContractTime = standartCloseCafeTime;
 
                     var shift = new WorkShiftExtendedDTO
-
                     {
                         ShiftDate = currentDay,
                         StartTime = employee.StartContractTime,
@@ -154,64 +164,79 @@ namespace LX.StaffScheduler.BLL.Services.Common
         }
 
         public async Task<List<WorkShiftExtendedDTO>> FillDayGaps(List<WorkShiftExtendedDTO> readyWeekShift, TimeOnly endShift, int cafeId)
+{
+    var newReadyWeekShift = new List<WorkShiftExtendedDTO>(readyWeekShift);
+    var freeSlotTracker = new HashSet<string>();
+
+    foreach (var dayShift in readyWeekShift)
+    {
+        var dayShifts = await repository.GetDayWorkShifts(cafeId, dayShift.ShiftDate);
+        var dayShiftsList = dayShifts.ToList();
+
+
+        if (dayShiftsList.Count() == 0)
         {
-            var newReadyWeekShift = new List<WorkShiftExtendedDTO>(readyWeekShift);
+            var temp = ConvertExtendedShiftsToNormal(readyWeekShift);
+            dayShifts = temp.Where(ws => ws.CafeId == cafeId && ws.ShiftDate == dayShift.ShiftDate).ToList();
+        }
+        var sortedShifts = dayShifts.OrderBy(s => s.StartTime).ToList();
 
-            foreach (var dayShift in readyWeekShift)
+
+        TimeOnly? currentStart = new TimeOnly(8, 0);
+
+        foreach (var shift in sortedShifts)
+        {
+            if (currentStart.HasValue && shift.StartTime >= currentStart.Value.AddHours(1))
             {
-                var dayShifts = await repository.GetDayWorkShifts(cafeId, dayShift.ShiftDate);
-                var dayShifftsList = dayShifts.ToList();
-
-                if (dayShifftsList.Count() == 0)
+                var newShift = new WorkShiftExtendedDTO
                 {
-                    var temp = ConvertExtendedShiftsToNormal(readyWeekShift);
-                    dayShifts = temp.Where(ws => ws.CafeId == cafeId && ws.ShiftDate == dayShift.ShiftDate).ToList();
-                }
-                var sortedShifts = dayShifts.OrderBy(s => s.StartTime).ToList();
+                    ShiftDate = dayShift.ShiftDate,
+                    StartTime = currentStart.Value,
+                    EndTime = shift.StartTime,
+                    CafeId = cafeId,
+                    EmployeeId = -1,
+                    EmployeeName = "Free Slot"
+                };
 
-                TimeOnly? currentStart = null;
+                var freeSlotKey = $"{newShift.ShiftDate}-{newShift.StartTime}-{newShift.EndTime}-{newShift.CafeId}-{newShift.EmployeeName}";
 
-                foreach (var shift in sortedShifts)
+                if (!freeSlotTracker.Contains(freeSlotKey))
                 {
-                    if (currentStart.HasValue && shift.StartTime >= currentStart.Value.AddHours(1))
-                    {
-                        var newShift = new WorkShiftExtendedDTO
-                        {
-                            ShiftDate = dayShift.ShiftDate,
-                            StartTime = currentStart.Value,
-                            EndTime = shift.StartTime,
-                            CafeId = cafeId,
-                            EmployeeId = -1,
-                            EmployeeName = "Free Slot"
-                        };
-                        newReadyWeekShift.Add(newShift);
-                        currentStart = null;
-                    }
-
-                    if (shift.EndTime < endShift)
-                    {
-                        currentStart = shift.EndTime;
-                    }
-                }
-
-                if (currentStart.HasValue && currentStart.Value < endShift)
-                {
-                    var newShift = new WorkShiftExtendedDTO
-                    {
-                        ShiftDate = dayShift.ShiftDate,
-                        StartTime = currentStart.Value,
-                        EndTime = endShift,
-                        CafeId = cafeId,
-                        EmployeeId = -1,
-                        EmployeeName = "Free Slot"
-                    };
+                    freeSlotTracker.Add(freeSlotKey);
                     newReadyWeekShift.Add(newShift);
                 }
             }
 
-            return newReadyWeekShift;
+            if (shift.EndTime < endShift)
+            {
+                currentStart = shift.EndTime;
+            }
         }
 
+        if (currentStart.HasValue && currentStart.Value < endShift)
+        {
+            var newShift = new WorkShiftExtendedDTO
+            {
+                ShiftDate = dayShift.ShiftDate,
+                StartTime = currentStart.Value,
+                EndTime = endShift,
+                CafeId = cafeId,
+                EmployeeId = -1,
+                EmployeeName = "Free Slot"
+            };
+
+            var freeSlotKey = $"{newShift.ShiftDate}-{newShift.StartTime}-{newShift.EndTime}-{newShift.CafeId}-{newShift.EmployeeName}";
+
+            if (!freeSlotTracker.Contains(freeSlotKey))
+            {
+                freeSlotTracker.Add(freeSlotKey);
+                newReadyWeekShift.Add(newShift);
+            }
+        }
+    }
+
+    return newReadyWeekShift;
+}
 
         public async Task<List<WorkShiftDTO>> GetAllAsync()
         {
@@ -302,6 +327,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
         public async Task<IEnumerable<DateOnly>> GetMondaysWorkShiftsAsync(int cafeId)
         {
             return await repository.GetMondaysWorkShiftsAsync(cafeId);
+
         }
 
         public async Task<IEnumerable<WorkShift>> SaveWeekWorkShifts(IEnumerable<WorkShiftExtendedDTO> workShifts)
@@ -316,6 +342,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             var workShiftsList = ConvertExtendedShiftsToNormal(workShifts);
 
             return await repository.UpdateWeekWorkShifts(workShiftsList);
+
         }
     }
 }

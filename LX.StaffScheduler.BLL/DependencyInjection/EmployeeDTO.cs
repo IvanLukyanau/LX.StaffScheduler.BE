@@ -1,6 +1,6 @@
+using LX.StaffScheduler.BLL.DTO;
 
-
-namespace LX.StaffScheduler.BLL.DTO
+namespace LX.StaffScheduler.BLL.DependencyInjection
 {
     public class EmployeeDTO : IDTO
     {

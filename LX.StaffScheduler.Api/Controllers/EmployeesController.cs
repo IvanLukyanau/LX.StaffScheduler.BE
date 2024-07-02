@@ -1,4 +1,4 @@
-﻿using LX.StaffScheduler.BLL.DTO;
+﻿using LX.StaffScheduler.BLL.DependencyInjection;
 using LX.StaffScheduler.BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 

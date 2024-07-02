@@ -132,6 +132,7 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
+
         [HttpPost("cafe/{cafeId}")]
         public async Task<IActionResult> SaveWeekSchedule([FromBody] IEnumerable<WorkShiftExtendedDTO> weekWorkshifts)
         {
@@ -145,6 +146,16 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return Problem($"Iternal server error: {ex.Message}");
             }
+
+        [HttpHead("cafe/{cafeId}/date/{day}")]
+        public async Task<IActionResult> CheckCurrentWeekScheduleExists(int cafeId, DateOnly day)
+        {
+            bool exists = await _svc.IsCurrentWeekScheduleExists(cafeId, day);
+            if (exists)
+                return NoContent(); 
+            else
+                return Ok(); 
+
         }
 
 
