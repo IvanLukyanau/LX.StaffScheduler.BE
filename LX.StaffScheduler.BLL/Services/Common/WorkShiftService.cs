@@ -162,7 +162,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
                 var dayShifts = await repository.GetDayWorkShifts(cafeId, dayShift.ShiftDate);
                 var dayShifftsList = dayShifts.ToList();
 
-                if(dayShifftsList.Count() == 0)
+                if (dayShifftsList.Count() == 0)
                 {
                     var temp = ConvertExtendedShiftsToNormal(readyWeekShift);
                     dayShifts = temp.Where(ws => ws.CafeId == cafeId && ws.ShiftDate == dayShift.ShiftDate).ToList();
@@ -301,7 +301,21 @@ namespace LX.StaffScheduler.BLL.Services.Common
 
         public async Task<IEnumerable<DateOnly>> GetMondaysWorkShiftsAsync(int cafeId)
         {
-            return  await repository.GetMondaysWorkShiftsAsync(cafeId);
+            return await repository.GetMondaysWorkShiftsAsync(cafeId);
+        }
+
+        public async Task<IEnumerable<WorkShift>> SaveWeekWorkShifts(IEnumerable<WorkShiftExtendedDTO> workShifts)
+        {
+            var workShiftsList = ConvertExtendedShiftsToNormal(workShifts);
+
+            return await repository.SaveWeekWorkShifts(workShiftsList);
+        }
+
+        public Task<IEnumerable<WorkShift>> UpdateWeekWorkShifts(IEnumerable<WorkShiftExtendedDTO> workShifts)
+        {
+            var workShiftsList = ConvertExtendedShiftsToNormal(workShifts);
+
+            return await repository.UpdateWeekWorkShifts(workShiftsList);
         }
     }
 }

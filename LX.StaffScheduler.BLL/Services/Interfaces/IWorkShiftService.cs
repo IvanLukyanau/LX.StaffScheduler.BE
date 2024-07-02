@@ -13,5 +13,10 @@ namespace LX.StaffScheduler.BLL.Services.Interfaces
         Task<List<WorkShiftExtendedDTO>> FillDayGaps(List<WorkShiftExtendedDTO> readyWeekShift, TimeOnly endShift, int cafeId);
         Task<IEnumerable<DateOnly>> GetMondaysWorkShiftsAsync(int cafeId);
 
+        Task<IEnumerable<WorkShift>> SaveWeekWorkShifts(IEnumerable<WorkShiftExtendedDTO> workShifts);
+        Task<IEnumerable<WorkShift>> UpdateWeekWorkShifts(IEnumerable<WorkShiftExtendedDTO> workShifts);
+
+
+
     }
 }

@@ -99,9 +99,9 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
-        
+
         [HttpGet("cafe/{cafeId}")]
-        public async Task<IActionResult> GetWeekWorkShifts(int cafeId, [FromBody] DateOnly day )
+        public async Task<IActionResult> GetWeekWorkShifts(int cafeId, [FromBody] DateOnly day)
         {
             try
             {
@@ -115,8 +115,10 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
+
+
         [HttpPost("cafe/{cafeId}/date/{day}")]
-        public async Task<IActionResult> PostWeekSchedule(int cafeId, DateOnly day )
+        public async Task<IActionResult> PostWeekSchedule(int cafeId, DateOnly day)
         {
             try
             {
@@ -128,9 +130,40 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return Problem($"Iternal server error: {ex.Message}");
             }
-
-          
         }
+
+        [HttpPost("cafe/{cafeId}")]
+        public async Task<IActionResult> SaveWeekSchedule([FromBody] IEnumerable<WorkShiftExtendedDTO> weekWorkshifts)
+        {
+            try
+            {
+                var response = await _svc.SaveWeekWorkShifts(weekWorkshifts);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Iternal server error: {ex.Message}");
+            }
+        }
+
+
+        [HttpPut("cafe/{cafeId}")]
+        public async Task<IActionResult> UpdateWeekSchedule([FromBody] IEnumerable<WorkShiftExtendedDTO> weekWorkshifts)
+        {
+            try
+            {
+                var response = await _svc.UpdateWeekWorkShifts(weekWorkshifts);
+                return Ok(response);
+
+            }
+            catch (Exception ex)
+            {
+                return Problem($"Iternal server error: {ex.Message}");
+            }
+        }
+
+
 
         [HttpGet("cafe/mondays/{cafeId}")]
         public async Task<IActionResult> GetMondaysSchedule(int cafeId)
