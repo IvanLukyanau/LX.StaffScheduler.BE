@@ -41,12 +41,12 @@ namespace LX.StaffScheduler.BLL.Services.Common
         public async Task<IEnumerable<WorkShiftExtendedDTO>> CreateWeekSchedule(int cafeId, DateOnly monday)
         {
             var readyWeekShift = new List<WorkShiftExtendedDTO>();
-            var standartOpenCafeTime = new TimeOnly(10, 0);
-            var standartCloseCafeTime = new TimeOnly(19, 0);
+            var standartOpenCafeTime = new TimeOnly(8, 0);
+            var standartCloseCafeTime = new TimeOnly(22, 0);
             var shifts = await repository.GetWeekWorkShifts(cafeId, monday);
             var shiftsList = shifts?.ToList();
 
-            if (shiftsList == null)
+            if (shiftsList.Count() == 0)
             {
                 var cafeEmployees = (await employeeRepository.GetCafeEmployees(cafeId)).ToList();
                 var cafeEmployeesIds = cafeEmployees.Select(e => e.Id).Distinct().ToList();
@@ -106,7 +106,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
             foreach (var cafeEmployee in cafeEmployees)
             {
                 var employeeContracts = userContractsList
-                    .Where(u => u.Id == cafeEmployee.Id && (int)currentDay.DayOfWeek == u.DayWeek)
+                    .Where(u => u.EmployeeId == cafeEmployee.Id && (int)currentDay.DayOfWeek == u.DayWeek)
                     .ToList();
 
                 foreach (var employee in employeeContracts)
@@ -118,13 +118,14 @@ namespace LX.StaffScheduler.BLL.Services.Common
                         employee.EndContractTime = standartCloseCafeTime;
 
                     var shift = new WorkShiftExtendedDTO
+
                     {
                         ShiftDate = currentDay,
                         StartTime = employee.StartContractTime,
                         EndTime = employee.EndContractTime,
                         CafeId = cafeId,
                         EmployeeId = employee.EmployeeId,
-                        EmployeeName = cafeEmployee.FirstName + cafeEmployee.LastName
+                        EmployeeName = cafeEmployee.FirstName + " " + cafeEmployee.LastName
                     };
                     dayShifts.Add(shift);
                 }
@@ -170,6 +171,13 @@ namespace LX.StaffScheduler.BLL.Services.Common
             foreach (var dayShift in readyWeekShift)
             {
                 var dayShifts = await repository.GetDayWorkShifts(cafeId, dayShift.ShiftDate);
+                var dayShifftsList = dayShifts.ToList();
+
+                if(dayShifftsList.Count() == 0)
+                {
+                    var temp = ConvertExtendedShiftsToNormal(readyWeekShift);
+                    dayShifts = temp.Where(ws => ws.CafeId == cafeId && ws.ShiftDate == dayShift.ShiftDate).ToList();
+                }
                 var sortedShifts = dayShifts.OrderBy(s => s.StartTime).ToList();
 
                 TimeOnly? currentStart = null;
@@ -235,7 +243,27 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return shifts?.WorkShiftsToDTOs();
         }
 
+        private static List<WorkShift> ConvertExtendedShiftsToNormal(IEnumerable<WorkShiftExtendedDTO> extendedShifts)
+        {
+            var shifts = new List<WorkShift>();
 
+            foreach (var extendedShift in extendedShifts)
+            {
+                var shift = new WorkShift
+                {
+                    Id = extendedShift.Id,
+                    ShiftDate = extendedShift.ShiftDate,
+                    StartTime = extendedShift.StartTime,
+                    EndTime = extendedShift.EndTime,
+                    CafeId = extendedShift.CafeId,
+                    EmployeeId = extendedShift.EmployeeId
+                };
+
+                shifts.Add(shift);
+            }
+
+            return shifts;
+        }
 
         public async Task RemoveAsync(int id)
         {
@@ -282,7 +310,10 @@ namespace LX.StaffScheduler.BLL.Services.Common
             return extendedShifts;
         }
 
-
+        public async Task<IEnumerable<DateOnly>> GetMondaysWorkShiftsAsync(int cafeId)
+        {
+            return  await repository.GetMondaysWorkShiftsAsync(cafeId);
+        }
     }
 }
 

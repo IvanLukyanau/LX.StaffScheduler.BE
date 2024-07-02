@@ -1,4 +1,5 @@
 ﻿using LX.StaffScheduler.BLL.DTO;
+using LX.StaffScheduler.DAL;
 
 namespace LX.StaffScheduler.BLL.Services.Interfaces
 {
@@ -12,5 +13,8 @@ namespace LX.StaffScheduler.BLL.Services.Interfaces
         Task<List<WorkShiftExtendedDTO>> FillDayGaps(List<WorkShiftExtendedDTO> readyWeekShift, TimeOnly endShift, int cafeId);
 
         Task<bool>IsCurrentWeekScheduleExists(int cafeId, DateOnly monday);
+        Task<IEnumerable<DateOnly>> GetMondaysWorkShiftsAsync(int cafeId);
+
+
     }
 }

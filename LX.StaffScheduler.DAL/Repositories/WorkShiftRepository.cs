@@ -46,21 +46,23 @@ namespace LX.StaffScheduler.DAL.Repositories
             var weekStartDates = new List<DateOnly>();
 
             var workShifts = await _context.WorkShifts
-                .Where(ws => ws.CafeId == cafeId && ws.ShiftDate.DayOfWeek == DayOfWeek.Monday)
+                .Where(ws => 
+                    ws.CafeId == cafeId)
                 .OrderBy(ws => ws.ShiftDate)
                 .ToListAsync();
 
-            var oldestMondayDate = workShifts.Select(ws => ws.ShiftDate).FirstOrDefault();
+            var oldestMondayDate = workShifts
+                .FirstOrDefault(ws => ws.ShiftDate.DayOfWeek == DayOfWeek.Monday)?.ShiftDate ?? default(DateOnly) ;
 
             if (oldestMondayDate == default)
             {
-                return weekStartDates; 
+                return weekStartDates;
             }
 
             weekStartDates.Add(oldestMondayDate);
             var currentMonday = oldestMondayDate;
 
-            while (currentMonday <= workShifts.Last().ShiftDate)
+            while (currentMonday < workShifts.Last().ShiftDate)
             {
                 currentMonday = currentMonday.AddDays(7);
                 weekStartDates.Add(currentMonday);
