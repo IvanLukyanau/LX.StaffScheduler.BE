@@ -30,7 +30,7 @@ namespace LX.StaffScheduler.BLL.Services.Common
         public async Task<IEnumerable<WorkShiftExtendedDTO>> CreateWeekSchedule(int cafeId, DateOnly monday)
         {
             var readyWeekShift = new List<WorkShiftExtendedDTO>();
-            var standartOpenCafeTime = new TimeOnly(10, 0);
+            var standartOpenCafeTime = new TimeOnly(8, 0);
             var standartCloseCafeTime = new TimeOnly(22, 0);
             var shifts = await repository.GetWeekWorkShifts(cafeId, monday);
             var shiftsList = shifts?.ToList();
