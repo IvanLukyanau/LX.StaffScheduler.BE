@@ -99,9 +99,9 @@ namespace LX.StaffScheduler.Api.Controllers
             }
         }
 
-        
+
         [HttpGet("cafe/{cafeId}")]
-        public async Task<IActionResult> GetWeekWorkShifts(int cafeId, [FromBody] DateOnly day )
+        public async Task<IActionResult> GetWeekWorkShifts(int cafeId, [FromBody] DateOnly day)
         {
             try
             {
@@ -116,7 +116,7 @@ namespace LX.StaffScheduler.Api.Controllers
         }
 
         [HttpPost("cafe/{cafeId}/date/{day}")]
-        public async Task<IActionResult> PostWeekSchedule(int cafeId, DateOnly day )
+        public async Task<IActionResult> PostWeekSchedule(int cafeId, DateOnly day)
         {
             try
             {
@@ -128,8 +128,16 @@ namespace LX.StaffScheduler.Api.Controllers
             {
                 return Problem($"Iternal server error: {ex.Message}");
             }
+        }
 
-          
+        [HttpHead("cafe/{cafeId}/date/{day}")]
+        public async Task<IActionResult> CheckCurrentWeekScheduleExists(int cafeId, DateOnly day)
+        {
+            bool exists = await _svc.IsCurrentWeekScheduleExists(cafeId, day);
+            if (exists)
+                return NoContent(); 
+            else
+                return Ok(); 
         }
 
         [HttpGet("cafe/mondays/{cafeId}")]
