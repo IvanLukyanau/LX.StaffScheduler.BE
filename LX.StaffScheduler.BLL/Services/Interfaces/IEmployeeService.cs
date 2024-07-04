@@ -1,4 +1,4 @@
-﻿using LX.StaffScheduler.BLL.DTO;
+﻿using LX.StaffScheduler.BLL.DependencyInjection;
 
 namespace LX.StaffScheduler.BLL.Services.Interfaces
 {

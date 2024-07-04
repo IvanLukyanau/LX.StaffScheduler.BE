@@ -1,5 +1,6 @@
 ﻿using LX.StaffScheduler.DAL.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics.Contracts;
 
 namespace LX.StaffScheduler.DAL.Repositories
 {
@@ -46,13 +47,13 @@ namespace LX.StaffScheduler.DAL.Repositories
             var weekStartDates = new List<DateOnly>();
 
             var workShifts = await _context.WorkShifts
-                .Where(ws => 
+                .Where(ws =>
                     ws.CafeId == cafeId)
                 .OrderBy(ws => ws.ShiftDate)
                 .ToListAsync();
 
             var oldestMondayDate = workShifts
-                .FirstOrDefault(ws => ws.ShiftDate.DayOfWeek == DayOfWeek.Monday)?.ShiftDate ?? default(DateOnly) ;
+                .FirstOrDefault(ws => ws.ShiftDate.DayOfWeek == DayOfWeek.Monday)?.ShiftDate ?? default(DateOnly);
 
             if (oldestMondayDate == default)
             {
@@ -86,6 +87,8 @@ namespace LX.StaffScheduler.DAL.Repositories
             return workShifts;
         }
 
+
+
         public async Task<IEnumerable<WorkShift>> GetDayWorkShifts(int cafeId, DateOnly day)
         {
             var workShifts = await _context.WorkShifts
@@ -95,6 +98,37 @@ namespace LX.StaffScheduler.DAL.Repositories
             return workShifts;
         }
 
+        public async Task<IEnumerable<WorkShift>> SaveWeekWorkShifts(IEnumerable<WorkShift> workShifts)
+        {
+            await _context.WorkShifts.AddRangeAsync(workShifts);
+            await _context.SaveChangesAsync();
+
+            var workShiftsList = workShifts.ToList();
+            var mondayOfTheWeek = workShiftsList.Min(ws => ws.ShiftDate);
+
+            var responseList = await GetWeekWorkShifts(workShiftsList.First().CafeId, mondayOfTheWeek);
+
+            return responseList;
+
+        }
+
+        public async Task<IEnumerable<WorkShift>> UpdateWeekWorkShifts(IEnumerable<WorkShift> workShifts)
+        {
+            var workShiftsList = workShifts.ToList();
+            var mondayOfTheWeek = workShiftsList.Min(ws => ws.ShiftDate);
+
+            var responseList = await GetWeekWorkShifts(workShiftsList.First().CafeId, mondayOfTheWeek);
+
+
+            _context.WorkShifts.RemoveRange(responseList);
+
+            await _context.WorkShifts.AddRangeAsync(workShiftsList);
+            await _context.SaveChangesAsync();
+
+            var updatedWorkShifts = await GetWeekWorkShifts(workShiftsList.First().CafeId, mondayOfTheWeek);
+
+            return updatedWorkShifts;
+        }
 
     }
 }
